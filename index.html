@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="theme-color" content="#0a0e1a">
+<title>Diagnostic Transparence Salariale — Glukoze</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://db.onlinewebfonts.com/c/295f822e07dee940baaf7685f4338b33?family=Kompot+Display" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+:root {
+  --bg:       #0a0e1a;
+  --bg2:      #111827;
+  --bg3:      #1a2236;
+  --bg4:      #1f2a42;
+  --border:   rgba(255,255,255,.09);
+  --border2:  rgba(255,255,255,.16);
+  --txt:      #f0f4ff;
+  --txt2:     #a8b4cc;
+  --txt3:     #6474a0;
+  --blue:     #4f8ef7;
+  --blue2:    #3b7de8;
+  --blue-bg:  rgba(79,142,247,.12);
+  --blue-brd: rgba(79,142,247,.35);
+  --red:      #f87171;
+  --red-bg:   rgba(248,113,113,.12);
+  --red-brd:  rgba(248,113,113,.35);
+  --amber:    #fbbf24;
+  --amber-bg: rgba(251,191,36,.12);
+  --amber-brd:rgba(251,191,36,.35);
+  --green:    #34d399;
+  --green-bg: rgba(52,211,153,.12);
+  --green-brd:rgba(52,211,153,.35);
+  --r: 14px;
+  --rsm: 9px;
+  --ff: 'Inter', system-ui, sans-serif;
+  --ffd: 'Syne', sans-serif;
+  --ffk: 'Kompot Display', 'Syne', sans-serif;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+html, body { height: 100%; background: var(--bg); font-family: var(--ff); color: var(--txt); overscroll-behavior: none; -webkit-font-smoothing: antialiased; }
+img { display: block; }
+
+.screen { display: none; flex-direction: column; min-height: 100dvh; }
+.screen.active { display: flex; }
+
+/* ══ WELCOME ══ */
+#screen-welcome { background: var(--bg); }
+
+.wh {
+  background: var(--bg2);
+  padding: 56px 24px 40px;
+  border-bottom: 1px solid var(--border);
+  position: relative; overflow: hidden;
+}
+.wh::after {
+  content: '';
+  position: absolute; right: -60px; bottom: -60px;
+  width: 260px; height: 260px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(79,142,247,.18) 0%, transparent 70%);
+  pointer-events: none;
+}
+.wh-logo { height: 26px; margin-bottom: 36px; opacity: .95; }
+.wh-pill {
+  display: inline-flex; align-items: center; gap: 5px;
+  background: var(--blue-bg); color: var(--blue);
+  font-size: 11px; font-weight: 600; letter-spacing: .07em;
+  padding: 4px 11px; border-radius: 20px;
+  border: 1px solid var(--blue-brd);
+  margin-bottom: 14px;
+}
+.wh-title {
+  font-family: var(--ffk);
+  font-size: 30px; font-weight: 400; line-height: 1.18;
+  color: var(--txt); margin-bottom: 12px;
+}
+.wh-title span { color: var(--blue); }
+.wh-sub { font-size: 14px; color: var(--txt2); line-height: 1.65; }
+
+.wb { padding: 24px 20px 120px; flex: 1; background: var(--bg); }
+
+.wcard {
+  background: var(--bg2); border-radius: var(--r);
+  border: 1px solid var(--border);
+  padding: 14px 16px; display: flex; align-items: flex-start; gap: 12px; margin-bottom: 10px;
+}
+.wcard-ico {
+  width: 36px; height: 36px; border-radius: var(--rsm);
+  background: var(--blue-bg); border: 1px solid var(--blue-brd);
+  display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0;
+}
+.wcard-tit { font-size: 14px; font-weight: 600; color: var(--txt); margin-bottom: 3px; }
+.wcard-bod { font-size: 13px; color: var(--txt2); line-height: 1.55; }
+
+.waxes-tit {
+  font-size: 11px; font-weight: 600; color: var(--txt3);
+  text-transform: uppercase; letter-spacing: .08em; margin: 20px 0 10px;
+}
+.waxe {
+  display: flex; align-items: center; gap: 12px;
+  padding: 11px 14px; background: var(--bg2);
+  border-radius: var(--rsm); border: 1px solid var(--border); margin-bottom: 7px;
+}
+.waxe-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+.waxe-nm { font-size: 13px; font-weight: 500; color: var(--txt); flex: 1; }
+.waxe-ct { font-size: 12px; color: var(--txt3); }
+
+.wnav {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  background: var(--bg2); border-top: 1px solid var(--border);
+  padding: 14px 20px calc(14px + env(safe-area-inset-bottom)); z-index: 200;
+}
+.btn-start {
+  width: 100%; background: var(--blue); color: #fff;
+  padding: 15px; border-radius: 50px; font-size: 15px; font-weight: 600;
+  border: none; cursor: pointer; font-family: var(--ff); letter-spacing: .01em;
+}
+.btn-start:active { background: var(--blue2); }
+
+/* ══ QUIZ ══ */
+#screen-quiz { background: var(--bg); }
+
+.qh {
+  background: var(--bg2); padding: 13px 18px 11px;
+  display: flex; align-items: center; gap: 10px;
+  position: sticky; top: 0; z-index: 100; flex-shrink: 0;
+  border-bottom: 1px solid var(--border);
+}
+.qh-logo { height: 20px; opacity: .9; }
+.qh-sep { width: 1px; height: 16px; background: var(--border2); }
+.qh-lbl { font-size: 13px; color: var(--txt2); font-weight: 500; }
+
+.qprog { background: var(--bg2); border-bottom: 1px solid var(--border); padding: 10px 18px 13px; flex-shrink: 0; }
+.qprog-top { display: flex; justify-content: space-between; font-size: 12px; color: var(--txt3); margin-bottom: 8px; }
+.qtrack { height: 3px; background: var(--bg4); border-radius: 2px; }
+.qfill { height: 3px; background: var(--blue); border-radius: 2px; transition: width .4s cubic-bezier(.4,0,.2,1); }
+
+.qtabs {
+  display: flex; gap: 6px; padding: 10px 14px;
+  background: var(--bg2); border-bottom: 1px solid var(--border);
+  overflow-x: auto; scrollbar-width: none; flex-shrink: 0;
+}
+.qtabs::-webkit-scrollbar { display: none; }
+.qtab {
+  padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 500;
+  white-space: nowrap; border: 1px solid var(--border);
+  color: var(--txt3); background: transparent; cursor: pointer;
+  transition: all .18s; flex-shrink: 0; font-family: var(--ff);
+}
+.qtab.active { background: var(--blue); color: #fff; border-color: var(--blue); }
+.qtab.done { background: var(--green-bg); color: var(--green); border-color: var(--green-brd); }
+
+.qscroll { flex: 1; overflow-y: auto; padding: 18px 16px 110px; }
+
+.qcat-head { margin-bottom: 20px; }
+.qcat-row { display: flex; align-items: center; gap: 10px; margin-bottom: 4px; }
+.qcat-ico {
+  width: 36px; height: 36px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center; font-size: 17px; flex-shrink: 0;
+}
+.qcat-nm { font-family: var(--ffd); font-size: 18px; font-weight: 700; color: var(--txt); }
+.qcat-ref { font-size: 12px; color: var(--txt3); margin-left: 46px; }
+
+.qcard {
+  background: var(--bg2); border-radius: var(--r);
+  border: 1px solid var(--border);
+  padding: 16px 16px 14px; margin-bottom: 10px; transition: border-color .2s;
+}
+.qcard.answered { border-color: rgba(79,142,247,.4); }
+.qnum { font-size: 11px; font-weight: 600; color: var(--txt3); letter-spacing: .06em; text-transform: uppercase; margin-bottom: 8px; }
+.qtxt { font-size: 14px; line-height: 1.6; color: var(--txt); margin-bottom: 16px; }
+
+.qtoggle { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 7px; }
+.tgb {
+  padding: 12px 4px 10px;
+  border-radius: var(--rsm);
+  border: 1.5px solid var(--border);
+  background: var(--bg3);
+  cursor: pointer; font-family: var(--ff);
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  transition: all .18s;
+}
+.tgb:active { transform: scale(.96); }
+.tgico {
+  width: 30px; height: 30px; border-radius: 50%;
+  background: var(--bg4);
+  display: flex; align-items: center; justify-content: center;
+  transition: all .18s;
+}
+.tglbl { font-size: 12px; font-weight: 700; letter-spacing: .03em; transition: color .18s; }
+
+/* Labels toujours colorés, plus vifs au repos, encore plus au sel */
+.tg-non  .tglbl { color: #f87171; }
+.tg-cours .tglbl { color: #fb923c; }
+.tg-oui  .tglbl { color: #4ade80; }
+
+.tg-non  { border-color: rgba(248,113,113,.25); }
+.tg-cours { border-color: rgba(251,146,60,.25); }
+.tg-oui  { border-color: rgba(74,222,128,.25); }
+
+.tg-non.sel  { border-color: var(--red-brd);   background: var(--red-bg); }
+.tg-non.sel .tgico  { background: var(--red-bg); }
+.tg-non.sel .tglbl  { color: #ff6b6b; }
+
+.tg-cours.sel { border-color: rgba(251,146,60,.5); background: rgba(251,146,60,.12); }
+.tg-cours.sel .tgico { background: rgba(251,146,60,.12); }
+.tg-cours.sel .tglbl { color: #fb923c; }
+
+.tg-oui.sel  { border-color: var(--green-brd);  background: var(--green-bg); }
+.tg-oui.sel .tgico  { background: var(--green-bg); }
+.tg-oui.sel .tglbl  { color: #4ade80; }
+
+.qnav {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  background: var(--bg2); border-top: 1px solid var(--border);
+  padding: 11px 16px calc(11px + env(safe-area-inset-bottom));
+  display: flex; gap: 8px; align-items: center; z-index: 200;
+}
+.btn-ghost {
+  padding: 12px 18px; border-radius: 50px; font-size: 14px; font-weight: 500;
+  border: 1px solid var(--border2); background: transparent;
+  color: var(--txt2); cursor: pointer; font-family: var(--ff);
+  white-space: nowrap; transition: all .18s;
+}
+.btn-ghost:disabled { opacity: .3; cursor: default; }
+.btn-prim {
+  flex: 1; padding: 12px; border-radius: 50px;
+  font-size: 14px; font-weight: 600; border: none;
+  background: var(--blue); color: #fff;
+  cursor: pointer; font-family: var(--ff);
+}
+.btn-prim:active { background: var(--blue2); }
+.btn-prim:disabled { opacity: .35; cursor: default; }
+.qhint { font-size: 12px; color: var(--txt3); text-align: center; flex: 1; line-height: 1.3; }
+
+/* ══ RESULTS ══ */
+#screen-results { background: var(--bg); }
+
+.rsh {
+  background: var(--bg2);
+  padding: 28px 20px 26px; flex-shrink: 0;
+  border-bottom: 1px solid var(--border);
+  position: relative; overflow: hidden;
+}
+.rsh::after {
+  content: ''; position: absolute; right: -50px; bottom: -50px;
+  width: 200px; height: 200px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(79,142,247,.14) 0%, transparent 70%);
+  pointer-events: none;
+}
+.rsh-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; position: relative; z-index: 1; }
+.rsh-logo { height: 19px; opacity: .9; }
+.rsh-tag {
+  background: var(--blue-bg); color: var(--blue);
+  font-size: 11px; font-weight: 600; padding: 4px 10px; border-radius: 20px;
+  border: 1px solid var(--blue-brd);
+}
+.rsh-score-row { display: flex; align-items: flex-end; gap: 6px; margin-bottom: 6px; position: relative; z-index: 1; }
+.rsh-score-num { font-family: var(--ffd); font-size: 66px; font-weight: 800; line-height: 1; color: var(--txt); }
+.rsh-score-pct { font-family: var(--ffd); font-size: 26px; font-weight: 700; color: var(--txt3); margin-bottom: 10px; }
+.rsh-pnm { font-family: var(--ffd); font-size: 20px; font-weight: 700; color: var(--txt); margin-bottom: 4px; position: relative; z-index: 1; }
+.rsh-psub { font-size: 13px; color: var(--txt2); line-height: 1.5; position: relative; z-index: 1; }
+
+.rsh-gauges { margin-top: 22px; display: flex; flex-direction: column; gap: 10px; position: relative; z-index: 1; }
+.rsg-row { display: flex; align-items: center; gap: 9px; }
+.rsg-lbl { font-size: 12px; color: var(--txt2); width: 100px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.rsg-track { flex: 1; height: 4px; background: var(--bg4); border-radius: 2px; overflow: hidden; }
+.rsg-fill { height: 4px; border-radius: 2px; transition: width .7s ease; }
+.rsg-pct { font-size: 12px; font-weight: 600; color: var(--txt2); width: 30px; text-align: right; flex-shrink: 0; }
+
+.rsbody { padding: 20px 16px 150px; }
+.rs-sec { font-size: 11px; font-weight: 600; color: var(--txt3); text-transform: uppercase; letter-spacing: .08em; margin: 20px 0 10px; }
+
+.rspc {
+  background: var(--bg2); border-radius: var(--r);
+  border: 1px solid var(--border); padding: 16px 18px; margin-bottom: 10px;
+}
+.rspc-pill {
+  display: inline-block; font-size: 11px; font-weight: 700;
+  padding: 3px 11px; border-radius: 20px; margin-bottom: 9px;
+}
+.rspc-desc { font-size: 13.5px; color: var(--txt2); line-height: 1.62; }
+
+.rscat {
+  background: var(--bg2); border-radius: var(--r);
+  border: 1px solid var(--border); margin-bottom: 9px; overflow: hidden;
+}
+.rscat-head {
+  display: flex; align-items: center; gap: 10px;
+  padding: 14px 16px 12px; cursor: pointer;
+}
+.rscat-ico { font-size: 17px; }
+.rscat-nm { font-size: 14px; font-weight: 600; color: var(--txt); flex: 1; line-height: 1.3; }
+.rscat-sc { font-size: 14px; font-weight: 700; }
+.rscat-chev { font-size: 10px; color: var(--txt3); transition: transform .22s; margin-left: 2px; }
+.rscat-chev.open { transform: rotate(180deg); }
+.rscat-body { display: none; padding: 0 16px 14px; border-top: 1px solid var(--border); }
+.rscat-body.open { display: block; }
+
+.aitem {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 10px 0; border-bottom: 1px solid var(--border);
+}
+.aitem:last-child { border: none; padding-bottom: 2px; }
+.aprio {
+  font-size: 10px; font-weight: 700;
+  padding: 3px 8px; border-radius: 20px;
+  flex-shrink: 0; margin-top: 2px; white-space: nowrap;
+  border: 1px solid;
+}
+.ph { background: var(--red-bg);   color: var(--red);   border-color: var(--red-brd); }
+.pm { background: var(--amber-bg); color: var(--amber); border-color: var(--amber-brd); }
+.pl { background: var(--green-bg); color: var(--green); border-color: var(--green-brd); }
+.atxt { font-size: 13.5px; color: var(--txt); line-height: 1.55; }
+.noact { padding: 12px 0 4px; font-size: 13.5px; color: var(--green); display: flex; align-items: center; gap: 8px; }
+
+.rsfoot {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  background: var(--bg2); border-top: 1px solid var(--border);
+  padding: 10px 18px calc(10px + env(safe-area-inset-bottom)); z-index: 200;
+}
+.rsrgpd {
+  font-size: 10px; color: var(--txt3); text-align: center; line-height: 1.5; margin-bottom: 9px;
+}
+.btn-pdf {
+  width: 100%; background: var(--blue); color: #fff;
+  padding: 14px; border-radius: 50px; font-size: 14px; font-weight: 600;
+  border: none; cursor: pointer; font-family: var(--ff);
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  margin-bottom: 7px;
+}
+.btn-pdf:active { background: var(--blue2); }
+.btn-restart {
+  width: 100%; background: transparent; color: var(--txt3);
+  padding: 8px; border-radius: 50px; font-size: 12.5px;
+  border: none; cursor: pointer; font-family: var(--ff);
+}
+</style>
+</head>
+<body>
+<div id="app">
+
+<!-- ══ WELCOME ══ -->
+<div class="screen active" id="screen-welcome">
+  <div class="wh">
+    <img class="wh-logo" id="logo-w" alt="Glukoze">
+    <div class="wh-pill">Directive (UE) 2023/970</div>
+    <div class="wh-title">Êtes-vous prêt pour la <span>transparence</span> des salaires ?</div>
+    <div class="wh-sub">Diagnostic confidentiel · Entreprises de 50 salariés et plus</div>
+  </div>
+  <div class="wb">
+    <div class="wcard">
+      <div class="wcard-ico">⏱</div>
+      <div><div class="wcard-tit">10 à 15 minutes</div><div class="wcard-bod">38 questions réparties en 5 axes de la directive</div></div>
+    </div>
+    <div class="wcard">
+      <div class="wcard-ico">🔒</div>
+      <div><div class="wcard-tit">100 % confidentiel</div><div class="wcard-bod">Aucune donnée collectée, transmise ou stockée. Tout reste sur votre appareil.</div></div>
+    </div>
+    <div class="waxes-tit">Les 5 axes évalués</div>
+    <div id="axes-preview"></div>
+  </div>
+  <div class="wnav">
+    <button class="btn-start" onclick="startQuiz()">Commencer le diagnostic →</button>
+  </div>
+</div>
+
+<!-- ══ QUIZ ══ -->
+<div class="screen" id="screen-quiz">
+  <div class="qh">
+    <img class="qh-logo" id="logo-q" alt="">
+    <div class="qh-sep"></div>
+    <div class="qh-lbl" id="qh-lbl">Catégorie 1 / 5</div>
+  </div>
+  <div class="qprog">
+    <div class="qprog-top"><span id="qp-txt">0 / 38 questions</span><span id="qp-pct">0 %</span></div>
+    <div class="qtrack"><div class="qfill" id="qfill" style="width:0%"></div></div>
+  </div>
+  <div class="qtabs" id="qtabs"></div>
+  <div class="qscroll" id="qscroll"></div>
+  <div class="qnav">
+    <button class="btn-ghost" id="btn-prev" onclick="prevCat()">← Retour</button>
+    <span class="qhint" id="qhint"></span>
+    <button class="btn-prim" id="btn-next" onclick="nextCat()">Suivant →</button>
+  </div>
+</div>
+
+<!-- ══ RESULTS ══ -->
+<div class="screen" id="screen-results">
+  <div class="rsh">
+    <div class="rsh-top">
+      <img class="rsh-logo" id="logo-r" alt="">
+      <div class="rsh-tag">Résultats</div>
+    </div>
+    <div class="rsh-score-row">
+      <div class="rsh-score-num" id="rs-num">--</div>
+      <div class="rsh-score-pct">%</div>
+    </div>
+    <div class="rsh-pnm" id="rs-pnm">--</div>
+    <div class="rsh-psub" id="rs-psub">--</div>
+    <div class="rsh-gauges" id="rs-gauges"></div>
+  </div>
+  <div class="rsbody" id="rs-body"></div>
+  <div class="rsfoot">
+    <div class="rsrgpd">🔒 Conformément au RGPD (règl. UE 2016/679) et à la loi Informatique et Libertés, aucune donnée saisie n'est collectée, transmise, stockée ou traitée en dehors de votre appareil. Aucun cookie. Aucun serveur.</div>
+    <button class="btn-pdf" onclick="downloadPDF()">
+      <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M7.5 1v8M3.5 6l4 4 4-4M1.5 12.5h12" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Télécharger mon bilan en PDF
+    </button>
+    <button class="btn-restart" onclick="restart()">Recommencer le diagnostic</button>
+  </div>
+</div>
+
+</div>
+<script>
+const LOGO = 'data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+CjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzExLmR0ZCI+Cjxzdmcgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDE5NCA0NSIgdmVyc2lvbj0iMS4xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB4bWw6c3BhY2U9InByZXNlcnZlIiB4bWxuczpzZXJpZj0iaHR0cDovL3d3dy5zZXJpZi5jb20vIiBzdHlsZT0iZmlsbC1ydWxlOmV2ZW5vZGQ7Y2xpcC1ydWxlOmV2ZW5vZGQ7c3Ryb2tlLWxpbmVqb2luOnJvdW5kO3N0cm9rZS1taXRlcmxpbWl0OjI7Ij4KICAgIDxwYXRoIGQ9Ik0zLjU0LDUuODdDMS41OCw1Ljg3IDAsNy40NiAwLDkuNDFDMCwxMS4zNiAxLjU5LDEyLjk1IDMuNTQsMTIuOTVDNS40OSwxMi45NSA3LjA4LDExLjM2IDcuMDgsOS40MUM3LjA4LDcuNDYgNS40OSw1Ljg3IDMuNTQsNS44N1pNMy41NCwxMC41OUMyLjg5LDEwLjU5IDIuMzYsMTAuMDYgMi4zNiw5LjQxQzIuMzYsOC43NiAyLjg5LDguMjMgMy41NCw4LjIzQzQuMTksOC4yMyA0LjcyLDguNzYgNC43Miw5LjQxQzQuNzIsMTAuMDYgNC4xOSwxMC41OSAzLjU0LDEwLjU5WiIgc3R5bGU9ImZpbGw6cmdiKDI1NSw4OSw4OCk7ZmlsbC1ydWxlOm5vbnplcm87Ii8+CiAgICA8cGF0aCBkPSJNMjQuNzksMjcuMTJDMjMuMjUsMjcuMTIgMjEuOTUsMjguMTEgMjEuNDYsMjkuNDhMMTcuNDksMjkuNDhDMTcsMjguMTEgMTUuNzEsMjcuMTIgMTQuMTYsMjcuMTJDMTIuMiwyNy4xMiAxMC42MiwyOC43MSAxMC42MiwzMC42NkMxMC42MiwzMi42MSAxMi4yMSwzNC4yIDE0LjE2LDM0LjJDMTUuNywzNC4yIDE3LDMzLjIxIDE3LjQ5LDMxLjg0TDIxLjQ3LDMxLjg0QzIxLjk2LDMzLjIxIDIzLjI1LDM0LjIgMjQuNzksMzQuMkMyNi43NSwzNC4yIDI4LjMzLDMyLjYxIDI4LjMzLDMwLjY2QzI4LjMzLDI4LjcxIDI2Ljc0LDI3LjEyIDI0Ljc5LDI3LjEyWk0xNC4xNywzMS44NEMxMy41MiwzMS44NCAxMi45OSwzMS4zMSAxMi45OSwzMC42NkMxMi45OSwzMC4wMSAxMy41MiwyOS40OCAxNC4xNywyOS40OEMxNC44MiwyOS40OCAxNS4zNSwzMC4wMSAxNS4zNSwzMC42NkMxNS4zNSwzMS4zMSAxNC44MiwyOS40OCAxNC4xNywzMS44NFpNMjQuNzksMzEuODRDMjQuMTQsMzEuODQgMjMuNjEsMzEuMzEgMjMuNjEsMzAuNjZDMjMuNjEsMzAuMDEgMjQuMTQsMjkuNDggMjQuNzksMjkuNDhDMjUuNDQsMjkuNDggMjUuOTcsMzAuMDEgMjUuOTcsMzAuNjZDMjUuOTcsMzEuMzEgMjUuNDQsMzEuODQgMjQuNzksMzEuODRaIiBzdHlsZT0iZmlsbDpyZ2IoMCwyMDQsMTU4KTtmaWxsLXJ1bGU6bm9uemVybzsiLz4KICAgIDxwYXRoIGQ9Ik0yNS45NywxNi43MUwyNS45NywxMi43M0MyNy4zNCwxMi4yNCAyOC4zMywxMC45NCAyOC4zMyw5LjRDMjguMzMsNy40NCAyNi43NCw1Ljg2IDI0Ljc5LDUuODZDMjIuODQsNS44NiAyMS4yNSw3LjQ1IDIxLjI1LDkuNEMyMS4yNSwxMC45NCAyMi4yNCwxMi4yNCAyMy42MSwxMi43M0wyMy42MSwxNi43MUMyMy40OSwxNi43NSAyMy4zOCwxNi43OSAyMy4yNywxNi44NUwxNy4zNSwxMC45M0MxNy41NywxMC40NyAxNy43LDkuOTYgMTcuNyw5LjQxQzE3LjcsNy40NSAxNi4xMSw1Ljg3IDE0LjE2LDUuODdDMTIuMjEsNS44NyAxMC42Miw3LjQ2IDEwLjYyLDkuNDFDMTAuNjIsMTEuMzYgMTIuMjEsMTIuOTUgMTQuMTYsMTIuOTVDMTQuNzEsMTIuOTUgMTUuMjIsMTIuODIgMTUuNjgsMTIuNkwyMS42LDE4LjUyQzIxLjM4LDE4Ljk4IDIxLjI1LDE5LjQ5IDIxLjI1LDIwLjA0QzIxLjI1LDIyIDIyLjg0LDIzLjU4IDI0Ljc5LDIzLjU4QzI2Ljc0LDIzLjU4IDI4LjMzLDIxLjk5IDI4LjMzLDIwLjA0QzI4LjMzLDE4LjUgMjcuMzQsMTcuMiAyNS45NywxNi43MVpNMTQuMTcsMTAuNTlDMTMuNTIsMTAuNTkgMTIuOTksMTAuMDYgMTIuOTksOS40MUMxMi45OSw4Ljc2IDEzLjUyLDguMjMgMTQuMTcsOC4yM0MxNC44Miw4LjIzIDE1LjM1LDguNzYgMTUuMzUsOS40MUMxNS4zNSwxMC4wNiAxNC44MiwxMC41OSAxNC4xNywxMC41OVpNMjQuNzksOC4yM0MyNS40NCw4LjIzIDI1Ljk3LDguNzYgMjUuOTcsOS40MUMyNS45NywxMC4wNiAyNS40NCwxMC41OSAyNC43OSwxMC41OUMyNC4xNCwxMC41OSAyMy42MSwxMC4wNiAyMy42MSw5LjQxQzIzLjYxLDguNzYgMjQuMTQsOC4yMyAyNC43OSw4LjIzWk0yNC43OSwyMS4yMkMyNC4xNCwyMS4yMiAyMy42MSwyMC42OSAyMy42MSwyMC4wNEMyMy42MSwxOS4zOSAyNC4xNCwxOC44NiAyNC43OSwxOC44NkMyNS40NCwxOC44NiAyNS45NywxOS4zOSAyNS45NywyMC4wNEMyNS45NywyMC42OSAyNS40NCwyMS4yMiAyNC43OSwyMS4yMloiIHN0eWxlPSJmaWxsOnJnYig2OCwxOTQsMjA0KTtmaWxsLXJ1bGU6bm9uemVybzsiLz4KICAgIDxwYXRoIGQ9Ik0xNC4xNywxNi40OUMxMi42MywxNi40OSAxMS4zMywxNy40OCAxMC44NCwxOC44NUw2Ljg2LDE4Ljg1QzYuMzcsMTcuNDggNS4wNywxNi40OSAzLjUzLDE2LjQ5QzEuNTcsMTYuNDkgLTAuMDEsMTguMDggLTAuMDEsMjAuMDNDLTAuMDEsMjEuOTggMS41OCwyMy41NyAzLjUzLDIzLjU3QzUuMDcsMjMuNTcgNi4zNywyMi41OCA2Ljg2LDIxLjIxTDEwLjg0LDIxLjIxQzEwLjg4LDIxLjMzIDEwLjkzLDIxLjQ0IDEwLjk4LDIxLjU1TDUuMDYsMjcuNDdDNC42LDI3LjI1IDQuMDksMjcuMTIgMy41NCwyNy4xMkMxLjU4LDI3LjEyIDAsMjguNzEgMCwzMC42NkMwLDMyLjYxIDEuNTksMzQuMiAzLjU0LDM0LjJDNS40OSwzNC4yIDcuMDgsMzIuNjEgNy4wOCwzMC42NkM3LjA4LDMwLjExIDYuOTUsMjkuNiA2LjczLDI5LjE0TDEyLjY1LDIzLjIyQzEzLjExLDIzLjQ0IDEzLjYyLDIzLjU3IDE0LjE3LDIzLjU3QzE2LjEzLDIzLjU3IDE3LjcxLDIxLjk4IDE3LjcxLDIwLjAzQzE3LjcxLDE4LjA4IDE2LjEyLDE2LjQ5IDE0LjE3LDE2LjQ5Wk0zLjU0LDIxLjIyQzIuODksMjEuMjIgMi4zNiwyMC42OSAyLjM2LDIwLjA0QzIuMzYsMTkuMzkgMi44OSwxOC44NiAzLjU0LDE4Ljg2QzQuMTksMTguODYgNC43MiwxOS4zOSA0LjcyLDIwLjA0QzQuNzIsMjAuNjkgNC4xOSwyMS4yMiAzLjU0LDIxLjIyWk0zLjU0LDMxLjg0QzIuODksMzEuODQgMi4zNiwzMS4zMSAyLjM2LDMwLjY2QzIuMzYsMzAuMDEgMi44OSwyOS40OCAzLjU0LDI5LjQ4QzQuMTksMjkuNDggNC43MiwzMC4wMSA0LjcyLDMwLjY2QzQuNzIsMzEuMzEgNC4xOSwyMS4yMiAzLjU0LDMxLjg0Wk0xNC4xNywyMS4yMkMxMy41MiwyMS4yMiAxMi45OSwyMC42OSAxMi45OSwyMC4wNEMxMi45OSwxOS4zOSAxMy41MiwxOC44NiAxNC4xNywxOC44NkMxNC44MiwxOC44NiAxNS4zNSwxOS4zOSAxNS4zNSwyMC4wNEMxNS4zNSwyMC42OSAxNC44MiwyMS4yMiAxNC4xNywyMS4yMloiIHN0eWxlPSJmaWxsOnJnYigyNTUsMTUzLDE4Nyk7ZmlsbC1ydWxlOm5vbnplcm87Ii8+CiAgICA8cGF0aCBkPSJNNDQuNDcsMzQuMjFDMzUuODMsMzQuMjEgMzMuNDksMjkuMjYgMzMuNDksMjAuMTJDMzMuNDksMTAuMDYgMzcuNTMsNS43MSA0NS44Niw1LjcxQzQ4Ljk0LDUuNzEgNTIuOCw2LjE1IDU0LjU0LDYuNjNMNTMuMTUsMTEuMzRDNTEuMDIsMTAuOTggNDguOTQsMTAuNTQgNDYuMDgsMTAuNTRDNDEuNDQsMTAuNTQgMzkuOTIsMTMuMDkgMzkuOTIsMTkuOTZDMzkuOTIsMjYuODMgNDEuNDQsMjkuNDIgNDUuNDcsMjkuNDJDNDYuNDMsMjkuNDIgNDguMTIsMjkuMzggNDkuNDYsMjkuMDZMNDkuNDYsMjIuOTVMNDQuOTUsMjIuOTVMNDQuOTUsMTguMzJMNTUuMzcsMTguMzJMNTUuMzcsMzIuNTNDNTIuNDYsMzMuNzcgNDguNDMsMzQuMjEgNDQuNDgsMzQuMjFMNDQuNDcsMzQuMjFaIiBzdHlsZT0iZmlsbDp3aGl0ZTtmaWxsLXJ1bGU6bm9uemVybzsiLz48cGF0aCBkPSJNNTkuNTMsNi4xOUw2NS43OCw2LjE5TDY1Ljc4LDI4LjgyTDc2LjY3LDI4LjgyTDc2LjY3LDMzLjczTDU5LjUzLDMzLjczTDU5LjUzLDYuMTlaIiBzdHlsZT0iZmlsbDp3aGl0ZTtmaWxsLXJ1bGU6bm9uemVybzsiLz48cGF0aCBkPSJNNzguOTcsMjQuNTFMNzguOTcsNi4xOUw4NS4yMiw2LjE5TDg1LjIyLDI0LjUxQzg1LjIyLDI3Ljk4IDg2LjEzLDI5LjUgODkuNzgsMjkuNUM5My40MywyOS41IDk0LjM4LDI3Ljk4IDk0LjM4LDI0LjUxTDk0LjM4LDYuMTlMMTAwLjYzLDYuMTlMMTAwLjYzLDI0LjUxQzEwMC42MywzMS4zIDk3Ljk4LDM0LjI1IDg5Ljc0LDM0LjI1QzgxLjUsMzQuMjUgNzguOTgsMzEuMyA3OC45OCwyNC41MUw3OC45NywyNC41MVoiIHN0eWxlPSJmaWxsOndoaXRlO2ZpbGwtcnVsZTpub256ZXJvOyIvPjxwYXRoIGQ9Ik0xMTMuODIsMjIuMTJMMTExLjE3LDIyLjEyTDExMS4xNywzMy43NEwxMDQuOTIsMzMuNzRMMTA0LjkyLDYuMTlMMTExLjE3LDYuMTlMMTExLjE3LDE3LjQ1TDExMy43MywxNy40NUwxMjAuMzMsNi4xOUwxMjcuMTQsNi4xOUwxMTguODEsMTkuMzZMMTI3LjQ5LDMzLjczTDEyMC4zNywzMy43M0wxMTMuODIsMjIuMTFMMTEzLjgyLDIyLjEyWiIgc3R5bGU9ImZpbGw6d2hpdGU7ZmlsbC1ydWxlOm5vbnplcm87Ii8+PHBhdGggZD0iTTEzOS4xNiw1LjcxQzE0Ny45Myw1LjcxIDE1MC43OSw5LjcgMTUwLjc5LDE5Ljk2QzE1MC43OSwzMC4yMiAxNDcuMDYsMzQuMjEgMTM5LjE2LDM0LjIxQzEzMC4zNSwzNC4yMSAxMjcuNTMsMzAuMjIgMTI3LjUzLDE5Ljk2QzEyNy41Myw5LjcgMTMxLjI2LDUuNzEgMTM5LjE2LDUuNzFaTTEzOS4xNiwxMC4zOEMxMzUuMzQsMTAuMzggMTMzLjk1LDEyLjQyIDEzMy45NSwxOS45NkMxMzMuOTUsMjcuNSAxMzUuMzQsMjkuNTQgMTM5LjE2LDI5LjU0QzE0Mi45OCwyOS41NCAxNDQuMzcsMjcuNSAxNDQuMzcsMTkuOTZDMTQ0LjM3LDEyLjQyIDE0Mi45OCwxMC4zOCAxMzkuMTYsMTAuMzhaIiBzdHlsZT0iZmlsbDp3aGl0ZTtmaWxsLXJ1bGU6bm9uemVybzsiLz48cGF0aCBkPSJNMTcxLjIzLDEwLjg2TDE1OS4zNCwyOS4xNEwxNzEuNTMsMjkuMTRMMTcxLjUzLDMzLjczTDE1Mi41NywzMy43M0wxNTIuNTcsMjkuMDZMMTY0LjQyLDEwLjc4TDE1Mi45NiwxMC43OEwxNTIuOTYsNi4xOUwxNzEuMjMsNi4xOUwxNzEuMjMsMTAuODZaIiBzdHlsZT0iZmlsbDp3aGl0ZTtmaWxsLXJ1bGU6bm9uemVybzsiLz48cGF0aCBkPSJNMTkyLjY3LDMzLjc0TDE3NC42MiwzMy43NEwxNzQuNjIsNi4xOUwxOTIuNTQsNi4xOUwxOTIuNTQsMTAuOUwxODAuODcsMTAuOUwxODAuODcsMTcuMjFMMTkwLjIsMTcuMjFMMTkwLjIsMjEuOTZMMTgwLjg3LDIxLjk2TDE4MC44NywyOS4wM0wxOTIuNjcsMjkuMDNMMTkyLjY3LDMzLjc0WiIgc3R5bGU9ImZpbGw6d2hpdGU7ZmlsbC1ydWxlOm5vbnplcm87Ii8+PC9zdmc+';
+
+document.querySelectorAll('[id^=logo]').forEach(el => el.src = LOGO);
+
+const CATS = [
+  { id:'sys', label:'Systèmes de rémunération', short:'Rémunération', icon:'⚖', color:'#4f8ef7', dot:'#4f8ef7', ref:'Art. 5 & 7 — Directive (UE) 2023/970', questions:[
+    {id:'s1',text:"Vos critères de rémunération (compétences, responsabilités, efforts, conditions de travail) sont-ils documentés et formalisés ?"},
+    {id:'s2',text:"Ces critères sont-ils appliqués de façon identique aux femmes et aux hommes ?"},
+    {id:'s3',text:"Les politiques de rémunération variable (primes, bonus, intéressement) sont-elles fondées sur des critères objectifs et non genrés ?"},
+    {id:'s4',text:"Vos classifications de postes sont-elles fondées sur des critères neutres du genre, sans sous-évaluation des métiers à prédominance féminine ?"},
+    {id:'s5',text:"Avez-vous évalué si certains avantages en nature ou compléments de salaire sont distribués de façon inégale selon le sexe ?"},
+    {id:'s6',text:"Un processus de révision périodique des critères de rémunération est-il en place pour détecter les biais potentiels ?"},
+    {id:'s7',text:"Les grilles ou fourchettes salariales sont-elles formalisées et accessibles pour l'ensemble des catégories de postes ?"}
+  ]},
+  { id:'int', label:'Transparence interne', short:'Transparence', icon:'📋', color:'#38bdf8', dot:'#38bdf8', ref:'Art. 7 & 8 — Directive (UE) 2023/970', questions:[
+    {id:'i1',text:"Les salariés reçoivent-ils, dès l'embauche, des informations sur les critères utilisés pour fixer et faire évoluer leur rémunération ?"},
+    {id:'i2',text:"Un salarié peut-il demander par écrit des informations sur le niveau de rémunération médian d'un poste de valeur égale au sien ?"},
+    {id:'i3',text:"Une réponse est-elle garantie dans un délai de 2 mois maximum à toute demande individuelle d'information salariale ?"},
+    {id:'i4',text:"Un service RH ou une personne désignée est-il en charge de répondre aux demandes d'information salariale individuelle ?"},
+    {id:'i5',text:"Votre règlement intérieur interdit-il toute clause de confidentialité empêchant un salarié de divulguer sa propre rémunération ?"},
+    {id:'i6',text:"Les représentants du personnel ont-ils accès aux données agrégées de rémunération pour exercer leurs missions ?"},
+    {id:'i7',text:"Les managers de proximité sont-ils formés pour expliquer à leurs équipes la politique de rémunération de l'entreprise ?"},
+    {id:'i8',text:"Le niveau de confiance des salariés dans l'équité de votre politique salariale vous semble-t-il satisfaisant ?"}
+  ]},
+  { id:'rec', label:'Transparence au recrutement', short:'Recrutement', icon:'👤', color:'#a78bfa', dot:'#a78bfa', ref:'Art. 5 & 6 — Directive (UE) 2023/970', questions:[
+    {id:'r1',text:"Indiquez-vous systématiquement une fourchette de rémunération dans chacune de vos offres d'emploi ou avant le premier entretien ?"},
+    {id:'r2',text:"Avez-vous formellement interdit aux recruteurs de demander l'historique salarial des candidats ?"},
+    {id:'r3',text:"La fourchette communiquée aux candidats correspond-elle aux grilles salariales internes en vigueur pour ce poste ?"},
+    {id:'r4',text:"Vos offres d'emploi publiées en ligne incluent-elles systématiquement une information salariale ?"},
+    {id:'r5',text:"Vos partenaires de recrutement (cabinets, agences) respectent-ils les mêmes obligations d'information salariale lorsqu'ils agissent pour votre compte ?"},
+    {id:'r6',text:"Les responsables d'entretiens sont-ils formés sur l'interdiction de négocier sur la base d'un historique salarial du candidat ?"},
+    {id:'r7',text:"Votre processus de négociation salariale à l'embauche respecte-t-il les fourchettes annoncées aux candidats ?"}
+  ]},
+  { id:'rep', label:'Reporting & obligations légales', short:'Reporting', icon:'📊', color:'#2dd4bf', dot:'#2dd4bf', ref:'Art. 9 & 10 — Directive (UE) 2023/970', questions:[
+    {id:'p1',text:"Connaissez-vous la date d'échéance du premier rapport applicable à votre entreprise selon la directive ?"},
+    {id:'p2',text:"Votre SIRH permet-il d'extraire les données de rémunération ventilées par sexe et par catégorie de travailleurs ?"},
+    {id:'p3',text:"Êtes-vous en mesure de calculer les indicateurs imposés par la directive (écart médian F/H, répartition par quartile, écart des compléments) ?"},
+    {id:'p4',text:"Avez-vous identifié l'autorité nationale compétente (organisme de contrôle) à qui transmettre ces données ?"},
+    {id:'p5',text:"Avez-vous préparé la publication publique des indicateurs d'écart de rémunération F/H ?"},
+    {id:'p6',text:"Un plan de communication interne et externe a-t-il été anticipé pour la diffusion de ces données ?"},
+    {id:'p7',text:"Avez-vous prévu une procédure d'explication à joindre au rapport si un écart significatif est constaté ?"},
+    {id:'p8',text:"Vos filiales ou entités relevant de seuils différents font-elles l'objet d'un suivi distinct pour les obligations déclaratives ?"}
+  ]},
+  { id:'aud', label:'Audit conjoint & action corrective', short:'Audit', icon:'🔍', color:'#fb923c', dot:'#fb923c', ref:'Art. 10 — Directive (UE) 2023/970', questions:[
+    {id:'a1',text:"Avez-vous réalisé une analyse des écarts de rémunération F/H pour des postes de valeur égale au cours des 12 derniers mois ?"},
+    {id:'a2',text:"Les justifications des différences de rémunération constatées sont-elles documentées de façon exhaustive ?"},
+    {id:'a3',text:"Si un écart inexpliqué supérieur à 5 % est détecté, avez-vous un protocole pour déclencher un audit conjoint avec les représentants du personnel ?"},
+    {id:'a4',text:"Un audit conjoint de rémunération a-t-il déjà été réalisé en association avec les représentants du personnel dans votre entreprise ?"},
+    {id:'a5',text:"Les représentants du personnel sont-ils régulièrement impliqués dans les démarches d'équité salariale ?"},
+    {id:'a6',text:"Un plan d'action correctif avec des mesures concrètes et un calendrier est-il mis en place lorsqu'un écart injustifié est détecté ?"},
+    {id:'a7',text:"Les mesures correctives prises sont-elles suivies et leur efficacité évaluée dans le temps ?"},
+    {id:'a8',text:"La direction générale est-elle régulièrement informée des résultats des analyses d'écart de rémunération et des mesures prises ?"}
+  ]}
+];
+
+const ACTIONS = {
+  s1:{t:"Documenter et formaliser les critères de rémunération (compétences, responsabilités, efforts, conditions de travail)",p:'h'},
+  s2:{t:"Garantir l'application identique des critères de rémunération sans distinction de sexe",p:'h'},
+  s3:{t:"Revoir les critères de rémunération variable pour éliminer tout biais de genre potentiel",p:'h'},
+  s4:{t:"Conduire une révision des classifications de postes pour détecter et corriger la sous-évaluation liée au genre",p:'h'},
+  s5:{t:"Auditer la distribution des avantages en nature et compléments de salaire selon le sexe",p:'m'},
+  s6:{t:"Mettre en place un processus de révision périodique des critères de rémunération",p:'m'},
+  s7:{t:"Formaliser et rendre accessibles les grilles ou fourchettes salariales par catégorie de poste",p:'h'},
+  i1:{t:"Intégrer dans l'onboarding une information sur les critères de fixation et d'évolution de la rémunération",p:'h'},
+  i2:{t:"Créer une procédure permettant à tout salarié de demander la rémunération médiane de sa catégorie de valeur égale",p:'h'},
+  i3:{t:"Garantir une réponse dans un délai maximum de 2 mois à toute demande individuelle d'information salariale",p:'h'},
+  i4:{t:"Désigner une personne ou un service RH responsable des réponses aux demandes individuelles d'information salariale",p:'h'},
+  i5:{t:"Supprimer toute clause de confidentialité interdisant à un salarié de divulguer sa propre rémunération",p:'h'},
+  i6:{t:"Formaliser le droit d'accès des représentants du personnel aux données agrégées de rémunération",p:'m'},
+  i7:{t:"Former les managers de proximité sur la politique salariale afin qu'ils puissent répondre aux questions de leurs équipes",p:'m'},
+  i8:{t:"Mener une enquête de perception sur l'équité salariale et mettre en place des actions de communication interne",p:'l'},
+  r1:{t:"Intégrer systématiquement une fourchette de rémunération dans toutes les offres d'emploi",p:'h'},
+  r2:{t:"Former les recruteurs et interdire formellement la demande d'historique salarial aux candidats",p:'h'},
+  r3:{t:"Aligner les fourchettes communiquées aux candidats avec les grilles salariales internes en vigueur",p:'m'},
+  r4:{t:"Mettre à jour le processus de publication des offres pour inclure l'information salariale sur toutes les plateformes",p:'h'},
+  r5:{t:"Mettre à jour les contrats de prestation avec les partenaires de recrutement pour inclure les obligations de transparence",p:'m'},
+  r6:{t:"Former les responsables d'entretiens sur l'interdiction de négocier sur la base d'un historique salarial",p:'h'},
+  r7:{t:"Formaliser les règles de négociation salariale à l'embauche en cohérence avec les fourchettes annoncées",p:'m'},
+  p1:{t:"Identifier la date de premier rapport applicable (2027 pour 250+ salariés ; 2031 pour 100-249 salariés)",p:'m'},
+  p2:{t:"Paramétrer le SIRH pour permettre l'extraction des rémunérations ventilées par sexe et catégorie de poste",p:'h'},
+  p3:{t:"Développer la méthodologie de calcul des indicateurs imposés (médiane, quartiles, écart des compléments)",p:'h'},
+  p4:{t:"Identifier l'autorité nationale compétente et ses exigences précises de format et de transmission",p:'m'},
+  p5:{t:"Élaborer un plan de préparation à la publication publique des indicateurs d'écart de rémunération",p:'h'},
+  p6:{t:"Préparer un plan de communication pour la diffusion des données aux salariés, représentants et au public",p:'m'},
+  p7:{t:"Rédiger une procédure d'explication et de justification à joindre au rapport en cas d'écart significatif",p:'m'},
+  p8:{t:"Mettre en place un suivi distinct par entité ou filiale selon les seuils d'effectifs applicables",p:'l'},
+  a1:{t:"Réaliser une analyse des écarts de rémunération F/H pour des postes de valeur égale dès cette année",p:'h'},
+  a2:{t:"Documenter de façon systématique les justifications de toute différence de rémunération constatée",p:'h'},
+  a3:{t:"Définir un protocole d'audit conjoint déclenché automatiquement si un écart inexpliqué > 5 % est détecté",p:'h'},
+  a4:{t:"Planifier un premier audit conjoint de rémunération avec les représentants du personnel",p:'h'},
+  a5:{t:"Associer les représentants du personnel à la démarche d'équité salariale de façon régulière et formalisée",p:'h'},
+  a6:{t:"Formaliser un plan d'action correctif avec mesures concrètes et calendrier en cas d'écart injustifié",p:'h'},
+  a7:{t:"Mettre en place un suivi de l'efficacité des mesures correctives dans le temps",p:'m'},
+  a8:{t:"Inclure un point régulier sur les résultats des analyses d'écart dans les reportings de direction générale",p:'m'}
+};
+
+const PROFILES = [
+  {min:0,  max:24, name:'Non conforme',                sub:'Risque juridique immédiat',              desc:"Votre organisation n'a pas encore amorcé sa mise en conformité. Le risque juridique et réputationnel est élevé. Des actions fondamentales doivent être lancées sans délai.", pb:'rgba(248,113,113,.15)', pt:'#fca5a5', bc:'#f87171'},
+  {min:25, max:44, name:'Partiellement engagé',         sub:'Démarche initiée, conformité insuffisante', desc:"Les premières actions ont été initiées mais la mise en conformité reste très partielle. Un plan d'action structuré est indispensable avant les premières échéances légales.", pb:'rgba(251,191,36,.13)',  pt:'#fde68a', bc:'#fbbf24'},
+  {min:45, max:64, name:'En cours de mise en conformité', sub:'Progression réelle, lacunes à combler', desc:"Votre organisation a amorcé les changements nécessaires sur plusieurs axes. Des lacunes persistent et requièrent une attention ciblée pour atteindre la conformité avant l'échéance.", pb:'rgba(251,191,36,.1)',   pt:'#fef08a', bc:'#facc15'},
+  {min:65, max:84, name:'Quasi-conforme',               sub:'Ajustements ciblés restants',            desc:"Vous maîtrisez bien les exigences de la directive. Quelques ajustements ciblés permettront d'atteindre une conformité complète et documentée.",pb:'rgba(79,142,247,.15)', pt:'#93c5fd', bc:'#4f8ef7'},
+  {min:85, max:100,name:'Conforme et exemplaire',       sub:'Référence sectorielle',                  desc:"Votre organisation est exemplaire en matière de transparence salariale. Vous êtes en avance sur les exigences réglementaires et incarnez les meilleures pratiques du secteur.", pb:'rgba(52,211,153,.13)', pt:'#6ee7b7', bc:'#34d399'}
+];
+
+let answers = {}, currentCat = 0;
+const TOTAL = CATS.reduce((s,c) => s + c.questions.length, 0);
+
+function countA() { return Object.keys(answers).filter(k => answers[k]).length; }
+function catScore(id) {
+  const c = CATS.find(x => x.id === id);
+  let s = 0;
+  c.questions.forEach(q => { if(answers[q.id]==='oui') s+=2; else if(answers[q.id]==='cours') s+=1; });
+  return Math.round(s / (c.questions.length * 2) * 100);
+}
+function globalScore() { return Math.round(CATS.reduce((s,c) => s + catScore(c.id), 0) / CATS.length); }
+function getProfile(g) { return PROFILES.find(p => g >= p.min && g <= p.max) || PROFILES[0]; }
+function catDone(i) { return CATS[i].questions.every(q => answers[q.id]); }
+function scCol(s) { return s>=65 ? '#4f8ef7' : s>=45 ? '#fbbf24' : '#f87171'; }
+
+function initWelcome() {
+  document.getElementById('axes-preview').innerHTML = CATS.map(c =>
+    `<div class="waxe"><div class="waxe-dot" style="background:${c.dot}"></div><div class="waxe-nm">${c.label}</div><div class="waxe-ct">${c.questions.length} questions</div></div>`
+  ).join('');
+}
+
+function startQuiz() { show('screen-quiz'); renderCat(0); }
+
+function renderCat(idx) {
+  currentCat = idx;
+  const cat = CATS[idx];
+  const done = countA(), pct = Math.round(done / TOTAL * 100);
+  document.getElementById('qh-lbl').textContent = `${idx+1} / ${CATS.length} — ${cat.short}`;
+  document.getElementById('qp-txt').textContent = `${done} / ${TOTAL} questions`;
+  document.getElementById('qp-pct').textContent = pct + ' %';
+  document.getElementById('qfill').style.width = pct + '%';
+
+  document.getElementById('qtabs').innerHTML = CATS.map((c,i) =>
+    `<div class="qtab ${i===idx?'active':catDone(i)?'done':''}" onclick="goTo(${i})">${c.icon} ${c.short}</div>`
+  ).join('');
+
+  const ICO_NON = `<svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 2l9 9M11 2L2 11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>`;
+  const ICO_COURS = `<svg width="13" height="13" viewBox="0 0 13 13" fill="none"><circle cx="6.5" cy="6.5" r="5" stroke="currentColor" stroke-width="1.6"/><path d="M6.5 3.5v3l2 2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>`;
+  const ICO_OUI = `<svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 6.5l3 3L11 3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+
+  let h = `<div class="qcat-head">
+    <div class="qcat-row">
+      <div class="qcat-ico" style="background:${cat.color}18;color:${cat.color}">${cat.icon}</div>
+      <div class="qcat-nm">${cat.label}</div>
+    </div>
+    <div class="qcat-ref">${cat.ref}</div>
+  </div>`;
+
+  cat.questions.forEach((q, qi) => {
+    const a = answers[q.id] || '';
+    h += `<div class="qcard ${a?'answered':''}">
+      <div class="qnum">Question ${qi+1} sur ${cat.questions.length}</div>
+      <div class="qtxt">${q.text}</div>
+      <div class="qtoggle">
+        <button class="tgb tg-non ${a==='non'?'sel':''}" onclick="setA('${q.id}','non')">
+          <div class="tgico" style="color:${a==='non'?'var(--red)':'var(--txt3)'}">${ICO_NON}</div>
+          <span class="tglbl">Non</span>
+        </button>
+        <button class="tgb tg-cours ${a==='cours'?'sel':''}" onclick="setA('${q.id}','cours')">
+          <div class="tgico" style="color:${a==='cours'?'var(--amber)':'var(--txt3)'}">${ICO_COURS}</div>
+          <span class="tglbl">En cours</span>
+        </button>
+        <button class="tgb tg-oui ${a==='oui'?'sel':''}" onclick="setA('${q.id}','oui')">
+          <div class="tgico" style="color:${a==='oui'?'var(--green)':'var(--txt3)'}">${ICO_OUI}</div>
+          <span class="tglbl">Oui</span>
+        </button>
+      </div>
+    </div>`;
+  });
+
+  document.getElementById('qscroll').innerHTML = h;
+  document.getElementById('qscroll').scrollTop = 0;
+
+  const isLast = idx === CATS.length - 1, isDone = catDone(idx), allDone = CATS.every((_,i) => catDone(i));
+  document.getElementById('btn-prev').style.visibility = idx === 0 ? 'hidden' : 'visible';
+  const nb = document.getElementById('btn-next');
+  nb.textContent = isLast ? 'Voir mes résultats →' : 'Suivant →';
+  nb.disabled = isLast ? !allDone : !isDone;
+  const miss = CATS[idx].questions.filter(q => !answers[q.id]).length;
+  document.getElementById('qhint').textContent = isDone ? '' : (miss + ' réponse' + (miss > 1 ? 's' : '') + ' manquante' + (miss > 1 ? 's' : ''));
+}
+
+function setA(id, val) { answers[id] = val; renderCat(currentCat); }
+function goTo(i) { renderCat(i); }
+function prevCat() { if(currentCat > 0) renderCat(currentCat - 1); }
+function nextCat() { if(currentCat < CATS.length - 1) renderCat(currentCat + 1); else showResults(); }
+
+function showResults() {
+  show('screen-results');
+  const g = globalScore(), pr = getProfile(g);
+  document.getElementById('rs-num').textContent = g;
+  document.getElementById('rs-pnm').textContent = pr.name;
+  document.getElementById('rs-psub').textContent = pr.sub;
+
+  document.getElementById('rs-gauges').innerHTML = CATS.map(c => {
+    const s = catScore(c.id);
+    return `<div class="rsg-row">
+      <div class="rsg-lbl">${c.icon} ${c.short}</div>
+      <div class="rsg-track"><div class="rsg-fill" style="width:${s}%;background:${scCol(s)}"></div></div>
+      <div class="rsg-pct" style="color:${scCol(s)}">${s} %</div>
+    </div>`;
+  }).join('');
+
+  let body = `<div class="rs-sec">Votre profil de conformité</div>
+  <div class="rspc">
+    <span class="rspc-pill" style="background:${pr.pb};color:${pr.pt};border:1px solid ${pr.bc}40">${pr.name}</span>
+    <div style="font-size:13px;font-weight:600;color:var(--txt2);margin-bottom:8px">${pr.sub}</div>
+    <div class="rspc-desc">${pr.desc}</div>
+  </div>`;
+
+  body += `<div class="rs-sec">Résultats détaillés par axe</div>`;
+  CATS.forEach(cat => {
+    const s = catScore(cat.id);
+    const acts = cat.questions.filter(q => answers[q.id] !== 'oui' && ACTIONS[q.id]).map(q => ({...ACTIONS[q.id], qid: q.id}));
+    body += `<div class="rscat">
+      <div class="rscat-head" onclick="toggleCat(this)">
+        <span class="rscat-ico">${cat.icon}</span>
+        <span class="rscat-nm">${cat.label}</span>
+        <span class="rscat-sc" style="color:${scCol(s)}">${s} %</span>
+        <span class="rscat-chev ${acts.length?'open':''}">▼</span>
+      </div>
+      <div class="rscat-body ${acts.length?'open':''}">`;
+    if (!acts.length) {
+      body += `<div class="noact"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7l3.5 3.5L12 3" stroke="var(--green)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Aucune action requise sur cet axe.</div>`;
+    } else {
+      acts.sort((a,b) => ({h:0,m:1,l:2}[a.p] - {h:0,m:1,l:2}[b.p])).forEach(a => {
+        const pl = a.p==='h' ? 'Priorité haute' : a.p==='m' ? 'Priorité moyenne' : 'Priorité basse';
+        const pc = a.p==='h' ? 'ph' : a.p==='m' ? 'pm' : 'pl';
+        body += `<div class="aitem"><span class="aprio ${pc}">${pl}</span><span class="atxt">${a.t}</span></div>`;
+      });
+    }
+    body += `</div></div>`;
+  });
+
+  document.getElementById('rs-body').innerHTML = body;
+}
+
+function toggleCat(h) {
+  const b = h.nextElementSibling, c = h.querySelector('.rscat-chev');
+  b.classList.toggle('open'); c.classList.toggle('open');
+}
+
+function downloadPDF() {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ unit: 'mm', format: 'a4' });
+  const W = 210, M = 18; let y = 0;
+  const g = globalScore(), pr = getProfile(g);
+  const date = new Date().toLocaleDateString('fr-FR', {day:'2-digit', month:'long', year:'numeric'});
+
+  function np(n=12) { if(y+n > 278) { doc.addPage(); y = M; } }
+  function h2r(h) { return h.replace('#','').match(/../g).map(x=>parseInt(x,16)); }
+
+  doc.setFillColor(10,14,26); doc.rect(0,0,W,46,'F');
+  doc.setTextColor(255,255,255); doc.setFontSize(16); doc.setFont('helvetica','bold');
+  doc.text('GLUKOZE', M, 15);
+  doc.setFontSize(8); doc.setFont('helvetica','normal');
+  doc.setTextColor(100,160,255);
+  doc.text('Diagnostic Transparence Salariale  —  Directive (UE) 2023/970', M, 22);
+  doc.setTextColor(140,160,200);
+  doc.text('Rapport confidentiel  —  ' + date, M, 29);
+  doc.text('Traitement 100 % local · Aucune donnée stockée ou transmise (RGPD)', M, 36);
+
+  const [pr1,pr2,pr3] = h2r(pr.bc);
+  doc.setFillColor(20,30,55); doc.roundedRect(W-60,7,44,32,4,4,'F');
+  doc.setFontSize(28); doc.setFont('helvetica','bold'); doc.setTextColor(pr1,pr2,pr3);
+  doc.text(g+'%', W-38, 27, {align:'center'});
+  doc.setFontSize(8); doc.setFont('helvetica','normal'); doc.setTextColor(120,140,175);
+  doc.text('Score global', W-38, 34, {align:'center'});
+
+  y = 54;
+  doc.setFillColor(18,25,45); doc.roundedRect(M, y, W-M*2, 28, 3,3,'F');
+  doc.setFontSize(12); doc.setFont('helvetica','bold'); doc.setTextColor(pr1,pr2,pr3);
+  doc.text(pr.name, M+7, y+9);
+  doc.setFontSize(9); doc.setFont('helvetica','italic'); doc.setTextColor(160,175,210);
+  doc.text(pr.sub, M+7, y+16);
+  doc.setFont('helvetica','normal'); doc.setTextColor(200,210,230);
+  const dl = doc.splitTextToSize(pr.desc, W-M*2-14);
+  doc.text(dl, M+7, y+22);
+  y += dl.length * 4.2 + 32;
+
+  doc.setFontSize(10); doc.setFont('helvetica','bold'); doc.setTextColor(200,215,255);
+  doc.text('Résultats par axe de la directive', M, y); y += 8;
+
+  CATS.forEach(cat => {
+    const s = catScore(cat.id);
+    const [r,gv,b] = h2r(scCol(s));
+    doc.setFontSize(9); doc.setFont('helvetica','normal'); doc.setTextColor(190,205,240);
+    doc.text(cat.icon + ' ' + cat.label, M, y);
+    doc.setFillColor(25,38,65); doc.roundedRect(M+90,y-3.5,58,4.5,2,2,'F');
+    doc.setFillColor(r,gv,b); doc.roundedRect(M+90,y-3.5,Math.max(1,s*58/100),4.5,2,2,'F');
+    doc.setFont('helvetica','bold'); doc.setTextColor(r,gv,b);
+    doc.text(s+'%', M+152, y);
+    y += 7.5;
+  });
+
+  y += 4; doc.setDrawColor(30,45,80); doc.setLineWidth(0.3); doc.line(M,y,W-M,y); y += 8;
+
+  doc.setFontSize(10); doc.setFont('helvetica','bold'); doc.setTextColor(200,215,255);
+  doc.text('Checklist de mise en conformité', M, y); y += 8;
+
+  CATS.forEach(cat => {
+    const acts = cat.questions.filter(q => answers[q.id] !== 'oui' && ACTIONS[q.id]).map(q => ({...ACTIONS[q.id], qid:q.id}));
+    if (!acts.length) return;
+    np(14);
+    doc.setFontSize(9); doc.setFont('helvetica','bold'); doc.setTextColor(130,165,230);
+    doc.text(cat.icon + ' ' + cat.label, M, y); y += 6;
+    acts.sort((a,b) => ({h:0,m:1,l:2}[a.p]-{h:0,m:1,l:2}[b.p])).forEach(a => {
+      np(10);
+      const pl = a.p==='h'?'HAUTE':a.p==='m'?'MOYENNE':'BASSE';
+      const [r,gv,b2] = a.p==='h'?[248,113,113]:a.p==='m'?[251,191,36]:[52,211,153];
+      doc.setFillColor(r,gv,b2,0.15); doc.roundedRect(M,y-3.5,22,5,2,2,'F');
+      doc.setTextColor(r,gv,b2); doc.setFontSize(7); doc.setFont('helvetica','bold');
+      doc.text(pl, M+11, y, {align:'center'});
+      doc.setTextColor(200,210,235); doc.setFontSize(8.5); doc.setFont('helvetica','normal');
+      const lines = doc.splitTextToSize(a.t, W-M*2-28);
+      doc.text(lines, M+25, y); y += lines.length*4.8 + 3;
+    });
+    y += 3;
+  });
+
+  doc.setFillColor(10,14,26); doc.rect(0,275,W,22,'F');
+  doc.setFontSize(7); doc.setFont('helvetica','normal'); doc.setTextColor(80,95,130);
+  doc.text("Conformément au RGPD (règl. UE 2016/679) et à la loi Informatique et Libertés, aucune donnée saisie dans ce diagnostic n'est collectée,", M, 281, {maxWidth:W-M*2});
+  doc.text("transmise, stockée ou traitée en dehors de votre appareil. Aucun cookie. Aucun serveur.   © Glukoze", M, 287, {maxWidth:W-M*2});
+
+  doc.save('diagnostic-transparence-salariale-glukoze.pdf');
+}
+
+function show(id) { document.querySelectorAll('.screen').forEach(s => s.classList.remove('active')); document.getElementById(id).classList.add('active'); }
+function restart() { answers = {}; currentCat = 0; show('screen-welcome'); }
+
+initWelcome();
+</script>
+</body>
+</html>

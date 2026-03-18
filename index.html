@@ -572,19 +572,19 @@ function renderCat(idx) {
 
   cat.questions.forEach((q, qi) => {
     const a = answers[q.id] || '';
-    h += `<div class="qcard ${a?'answered':''}">
+    h += `<div class="qcard ${a?'answered':''}" id="qcard-${q.id}">
       <div class="qnum">Question ${qi+1} sur ${cat.questions.length}</div>
       <div class="qtxt">${q.text}</div>
       <div class="qtoggle">
-        <button class="tgb tg-non ${a==='non'?'sel':''}" onclick="setA('${q.id}','non')">
+        <button class="tgb tg-non ${a==='non'?'sel':''}" data-val="non" onclick="setA('${q.id}','non')">
           <div class="tgico" style="color:${a==='non'?'var(--red)':'var(--txt3)'}">${ICO_NON}</div>
           <span class="tglbl">Non</span>
         </button>
-        <button class="tgb tg-cours ${a==='cours'?'sel':''}" onclick="setA('${q.id}','cours')">
+        <button class="tgb tg-cours ${a==='cours'?'sel':''}" data-val="cours" onclick="setA('${q.id}','cours')">
           <div class="tgico" style="color:${a==='cours'?'var(--amber)':'var(--txt3)'}">${ICO_COURS}</div>
           <span class="tglbl">En cours</span>
         </button>
-        <button class="tgb tg-oui ${a==='oui'?'sel':''}" onclick="setA('${q.id}','oui')">
+        <button class="tgb tg-oui ${a==='oui'?'sel':''}" data-val="oui" onclick="setA('${q.id}','oui')">
           <div class="tgico" style="color:${a==='oui'?'var(--green)':'var(--txt3)'}">${ICO_OUI}</div>
           <span class="tglbl">Oui</span>
         </button>
@@ -605,7 +605,43 @@ function renderCat(idx) {
   document.getElementById('qhint').textContent = isDone ? '' : (miss + ' réponse' + (miss > 1 ? 's' : '') + ' manquante' + (miss > 1 ? 's' : ''));
 }
 
-function setA(id, val) { answers[id] = val; renderCat(currentCat); }
+function setA(id, val) {
+  answers[id] = val;
+  /* Met à jour visuellement uniquement la question touchée, sans re-render */
+  const card = document.getElementById('qcard-' + id);
+  if (card) {
+    card.classList.toggle('answered', true);
+    card.querySelectorAll('.tgb').forEach(btn => {
+      btn.classList.remove('sel');
+    });
+    const selBtn = card.querySelector('.tgb[data-val="' + val + '"]');
+    if (selBtn) selBtn.classList.add('sel');
+    /* Mettre à jour les couleurs d'icônes */
+    card.querySelectorAll('.tgb').forEach(btn => {
+      const ico = btn.querySelector('.tgico');
+      const bval = btn.dataset.val;
+      if (bval === 'non')   ico.style.color = val==='non'   ? 'var(--red)'   : 'var(--txt3)';
+      if (bval === 'cours') ico.style.color = val==='cours' ? 'var(--amber)' : 'var(--txt3)';
+      if (bval === 'oui')   ico.style.color = val==='oui'   ? 'var(--green)' : 'var(--txt3)';
+    });
+  }
+  /* Met à jour la progress bar et le bouton suivant sans toucher au scroll */
+  const done = countA(), pct = Math.round(done / TOTAL * 100);
+  document.getElementById('qp-txt').textContent = done + ' / ' + TOTAL + ' questions';
+  document.getElementById('qp-pct').textContent = pct + ' %';
+  document.getElementById('qfill').style.width = pct + '%';
+  const isLast = currentCat === CATS.length - 1;
+  const isDone = catDone(currentCat);
+  const allDone = CATS.every((_,i) => catDone(i));
+  const nb = document.getElementById('btn-next');
+  nb.disabled = isLast ? !allDone : !isDone;
+  const miss = CATS[currentCat].questions.filter(q => !answers[q.id]).length;
+  document.getElementById('qhint').textContent = isDone ? '' : (miss + ' réponse' + (miss > 1 ? 's' : '') + ' manquante' + (miss > 1 ? 's' : ''));
+  /* Onglets */
+  document.querySelectorAll('.qtab').forEach((tab, i) => {
+    tab.className = 'qtab' + (i === currentCat ? ' active' : catDone(i) ? ' done' : '');
+  });
+}
 function goTo(i) { renderCat(i); }
 function prevCat() { if(currentCat > 0) renderCat(currentCat - 1); }
 function nextCat() { if(currentCat < CATS.length - 1) renderCat(currentCat + 1); else showResults(); }

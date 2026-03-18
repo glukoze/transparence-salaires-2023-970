@@ -435,95 +435,106 @@ const LOGO = 'data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0i
 document.querySelectorAll('[id^=logo]').forEach(el => el.src = LOGO);
 
 const CATS = [
-  { id:'sys', label:'Systèmes de rémunération', short:'Rémunération', icon:'⚖', color:'#4f8ef7', dot:'#4f8ef7', ref:'Art. 5 & 7 — Directive (UE) 2023/970', questions:[
-    {id:'s1',text:"Vos critères de rémunération (compétences, responsabilités, efforts, conditions de travail) sont-ils documentés et formalisés ?"},
-    {id:'s2',text:"Ces critères sont-ils appliqués de façon identique aux femmes et aux hommes ?"},
-    {id:'s3',text:"Les politiques de rémunération variable (primes, bonus, intéressement) sont-elles fondées sur des critères objectifs et non genrés ?"},
-    {id:'s4',text:"Vos classifications de postes sont-elles fondées sur des critères neutres du genre, sans sous-évaluation des métiers à prédominance féminine ?"},
-    {id:'s5',text:"Avez-vous évalué si certains avantages en nature ou compléments de salaire sont distribués de façon inégale selon le sexe ?"},
-    {id:'s6',text:"Un processus de révision périodique des critères de rémunération est-il en place pour détecter les biais potentiels ?"},
-    {id:'s7',text:"Les grilles ou fourchettes salariales sont-elles formalisées et accessibles pour l'ensemble des catégories de postes ?"}
+  { id:'sys', label:'Architecture des emplois & rémunération', short:'Emplois & rem.', icon:'⚖', color:'#4f8ef7', dot:'#4f8ef7', ref:'Art. 4 & 7 — Directive (UE) 2023/970', questions:[
+    {id:'s1',text:"Disposez-vous d'un référentiel emplois formalisé (fiches de poste, familles de métiers, niveaux) couvrant l'ensemble de vos salariés ?"},
+    {id:'s2',text:"Utilisez-vous une méthode de pesée des postes (Hay, Mercer, WAAGE ou équivalente) permettant de démontrer qu'un travail est 'de valeur égale' au sens de la directive ?"},
+    {id:'s3',text:"Ce référentiel emplois a-t-il été revu pour détecter et corriger la sous-évaluation des métiers à prédominance féminine ?"},
+    {id:'s4',text:"Vos critères de rémunération (compétences, responsabilités, efforts, conditions de travail) sont-ils documentés, objectifs et non sexistes ?"},
+    {id:'s5',text:"Les politiques de rémunération variable (primes, bonus) ainsi que les avantages en nature sont-ils fondés sur des critères objectifs appliqués sans distinction de sexe ?"},
+    {id:'s6',text:"Les critères de progression salariale (augmentations, promotions) sont-ils formalisés et accessibles à tous les salariés ?"},
+    {id:'s7',text:"Les grilles ou fourchettes salariales sont-elles formalisées et accessibles pour l'ensemble des catégories de postes ?"},
+    {id:'s8',text:"Les décisions individuelles de rémunération (embauche, augmentation, promotion) sont-elles tracées et documentées pour permettre de justifier tout écart en cas de recours ?"}
   ]},
   { id:'int', label:'Transparence interne', short:'Transparence', icon:'📋', color:'#38bdf8', dot:'#38bdf8', ref:'Art. 7 & 8 — Directive (UE) 2023/970', questions:[
-    {id:'i1',text:"Les salariés reçoivent-ils, dès l'embauche, des informations sur les critères utilisés pour fixer et faire évoluer leur rémunération ?"},
-    {id:'i2',text:"Un salarié peut-il demander par écrit des informations sur le niveau de rémunération médian d'un poste de valeur égale au sien ?"},
-    {id:'i3',text:"Une réponse est-elle garantie dans un délai de 2 mois maximum à toute demande individuelle d'information salariale ?"},
-    {id:'i4',text:"Un service RH ou une personne désignée est-il en charge de répondre aux demandes d'information salariale individuelle ?"},
-    {id:'i5',text:"Votre règlement intérieur interdit-il toute clause de confidentialité empêchant un salarié de divulguer sa propre rémunération ?"},
-    {id:'i6',text:"Les représentants du personnel ont-ils accès aux données agrégées de rémunération pour exercer leurs missions ?"},
-    {id:'i7',text:"Les managers de proximité sont-ils formés pour expliquer à leurs équipes la politique de rémunération de l'entreprise ?"},
-    {id:'i8',text:"Le niveau de confiance des salariés dans l'équité de votre politique salariale vous semble-t-il satisfaisant ?"}
+    {id:'i1',text:"Les salariés reçoivent-ils, dès l'embauche, des informations sur les critères utilisés pour fixer ET faire progresser leur rémunération ?"},
+    {id:'i2',text:"Un salarié peut-il demander par écrit des informations sur le niveau de rémunération médian d'un poste de valeur égale au sien, ventilé par sexe ?"},
+    {id:'i3',text:"Une personne ou un service RH désigné est-il en charge de répondre à ces demandes dans un délai garanti de 2 mois maximum ?"},
+    {id:'i4',text:"Votre règlement intérieur interdit-il toute clause de confidentialité empêchant un salarié de divulguer sa propre rémunération ?"},
+    {id:'i5',text:"Les représentants du personnel ont-ils accès aux données agrégées de rémunération et peuvent-ils se faire mandataires d'un salarié dans sa démarche d'information salariale ?"},
+    {id:'i6',text:"Les managers de proximité sont-ils formés pour expliquer à leurs équipes la politique de rémunération et les critères de progression ?"}
   ]},
   { id:'rec', label:'Transparence du recrutement', short:'Recrutement', icon:'👤', color:'#a78bfa', dot:'#a78bfa', ref:'Art. 5 & 6 — Directive (UE) 2023/970', questions:[
-    {id:'r1',text:"Indiquez-vous systématiquement une fourchette de rémunération dans chacune de vos offres d'emploi ou avant le premier entretien ?"},
-    {id:'r2',text:"Avez-vous formellement interdit aux recruteurs de demander l'historique salarial des candidats ?"},
-    {id:'r3',text:"La fourchette communiquée aux candidats correspond-elle aux grilles salariales internes en vigueur pour ce poste ?"},
-    {id:'r4',text:"Vos offres d'emploi publiées en ligne incluent-elles systématiquement une information salariale ?"},
-    {id:'r5',text:"Vos partenaires de recrutement (cabinets, agences) respectent-ils les mêmes obligations d'information salariale lorsqu'ils agissent pour votre compte ?"},
-    {id:'r6',text:"Les responsables d'entretiens sont-ils formés sur l'interdiction de négocier sur la base d'un historique salarial du candidat ?"},
-    {id:'r7',text:"Votre processus de négociation salariale à l'embauche respecte-t-il les fourchettes annoncées aux candidats ?"}
+    {id:'r1',text:"Indiquez-vous systématiquement une fourchette de rémunération dans toutes vos offres d'emploi et avant le premier entretien ?"},
+    {id:'r2',text:"Informez-vous les candidats des dispositions de la convention collective applicable au poste (primes, avantages, ancienneté) ?"},
+    {id:'r3',text:"Avez-vous formellement interdit aux recruteurs et responsables d'entretiens de demander l'historique salarial des candidats ?"},
+    {id:'r4',text:"Vos offres d'emploi et intitulés de postes sont-ils rédigés de façon non sexiste (formulations épicènes ou doublets) ?"},
+    {id:'r5',text:"La fourchette communiquée aux candidats correspond-elle aux grilles salariales internes en vigueur pour ce poste ?"},
+    {id:'r6',text:"Vos partenaires de recrutement (cabinets, agences) respectent-ils les mêmes obligations d'information salariale lorsqu'ils agissent pour votre compte ?"}
   ]},
   { id:'rep', label:'Reporting & obligations légales', short:'Reporting', icon:'📊', color:'#2dd4bf', dot:'#2dd4bf', ref:'Art. 9 & 10 — Directive (UE) 2023/970', questions:[
-    {id:'p1',text:"Connaissez-vous la date d'échéance du premier rapport applicable à votre entreprise selon la directive ?"},
-    {id:'p2',text:"Votre SIRH permet-il d'extraire les données de rémunération ventilées par sexe et par catégorie de travailleurs ?"},
-    {id:'p3',text:"Êtes-vous en mesure de calculer les indicateurs imposés par la directive (écart médian F/H, répartition par quartile, écart des compléments) ?"},
-    {id:'p4',text:"Avez-vous identifié l'autorité nationale compétente (organisme de contrôle) à qui transmettre ces données ?"},
-    {id:'p5',text:"Avez-vous préparé la publication publique des indicateurs d'écart de rémunération F/H ?"},
-    {id:'p6',text:"Un plan de communication interne et externe a-t-il été anticipé pour la diffusion de ces données ?"},
-    {id:'p7',text:"Avez-vous prévu une procédure d'explication à joindre au rapport si un écart significatif est constaté ?"},
-    {id:'p8',text:"Vos filiales ou entités relevant de seuils différents font-elles l'objet d'un suivi distinct pour les obligations déclaratives ?"}
+    {id:'p1',text:"Votre SIRH permet-il d'extraire les données de rémunération ventilées par sexe ET par catégorie de travailleurs effectuant un travail de valeur égale ?"},
+    {id:'p2',text:"Êtes-vous en mesure de calculer les indicateurs imposés par la directive (écart médian F/H, répartition par quartile, écart des compléments de rémunération) ?"},
+    {id:'p3',text:"Avez-vous anticipé la publication publique de ces indicateurs et l'articulation avec votre index d'égalité professionnelle F/H actuel ?"},
+    {id:'p4',text:"Avez-vous prévu une procédure d'explication et de justification à joindre au rapport si un écart significatif est constaté ?"},
+    {id:'p5',text:"Vos filiales ou entités relevant de seuils différents font-elles l'objet d'un suivi distinct pour les obligations déclaratives ?"}
   ]},
-  { id:'aud', label:'Audit conjoint & action corrective', short:'Audit', icon:'🔍', color:'#fb923c', dot:'#fb923c', ref:'Art. 10 — Directive (UE) 2023/970', questions:[
+  { id:'aud', label:'Audit conjoint & action corrective', short:'Audit', icon:'🔍', color:'#fb923c', dot:'#fb923c', ref:'Art. 10 & 18 — Directive (UE) 2023/970', questions:[
     {id:'a1',text:"Avez-vous réalisé une analyse des écarts de rémunération F/H pour des postes de valeur égale au cours des 12 derniers mois ?"},
-    {id:'a2',text:"Les justifications des différences de rémunération constatées sont-elles documentées de façon exhaustive ?"},
-    {id:'a3',text:"Si un écart inexpliqué supérieur à 5 % est détecté, avez-vous un protocole pour déclencher un audit conjoint avec les représentants du personnel ?"},
-    {id:'a4',text:"Un audit conjoint de rémunération a-t-il déjà été réalisé en association avec les représentants du personnel dans votre entreprise ?"},
-    {id:'a5',text:"Les représentants du personnel sont-ils régulièrement impliqués dans les démarches d'équité salariale ?"},
-    {id:'a6',text:"Un plan d'action correctif avec des mesures concrètes et un calendrier est-il mis en place lorsqu'un écart injustifié est détecté ?"},
-    {id:'a7',text:"Les mesures correctives prises sont-elles suivies et leur efficacité évaluée dans le temps ?"},
-    {id:'a8',text:"La direction générale est-elle régulièrement informée des résultats des analyses d'écart de rémunération et des mesures prises ?"}
+    {id:'a2',text:"Les justifications des différences de rémunération constatées sont-elles documentées de façon à supporter un renversement de la charge de la preuve en cas de litige ?"},
+    {id:'a3',text:"Si un écart inexpliqué supérieur à 5 % est détecté, avez-vous un protocole formel pour déclencher un audit conjoint avec les représentants du personnel ?"},
+    {id:'a4',text:"Un audit conjoint de rémunération a-t-il déjà été réalisé en association avec les représentants du personnel ?"},
+    {id:'a5',text:"Un plan d'action correctif avec mesures concrètes, responsables désignés et calendrier est-il mis en place lorsqu'un écart injustifié est détecté ?"},
+    {id:'a6',text:"Les mesures correctives prises sont-elles suivies dans le temps et leur efficacité évaluée avant le prochain rapport ?"},
+    {id:'a7',text:"L'entreprise a-t-elle évalué son exposition aux sanctions prévues par la directive (amendes, exclusion des marchés publics) et mis en place des mesures préventives ?"}
   ]}
 ];
 
+const BLIND_SPOTS = [
+  {
+    label:'Référentiel emplois & pesée des postes',
+    ref:'Art. 4',
+    detail:"Ce diagnostic ne couvre pas l'existence d'une méthode formelle de pesée des postes (Hay, Mercer, WAAGE ou équivalente). Sans outil de classification objectif, il est impossible de démontrer qu'un travail est 'de valeur égale' au sens juridique de la directive. C'est un prérequis à toute démarche de conformité."
+  },
+  {
+    label:'Catégories de travailleurs & architecture salariale',
+    ref:'Art. 7 & 9',
+    detail:"La directive oblige à communiquer les rémunérations par 'catégorie de travailleurs effectuant un travail de valeur égale'. Si ces catégories ne sont pas définies et documentées dans votre référentiel, ni le droit à l'information des salariés ni le reporting ne peuvent être mis en œuvre correctement."
+  },
+  {
+    label:'Travailleurs atypiques & intérimaires',
+    ref:'Art. 2',
+    detail:"La directive s'applique à tous les travailleurs, y compris les intérimaires, CDD, temps partiels et travailleurs de plateformes. Ce diagnostic se concentre sur les salariés permanents. Un audit spécifique des populations atypiques est recommandé."
+  },
+  {
+    label:'Risque juridique & renversement de la charge de la preuve',
+    ref:'Art. 18 & 25',
+    detail:"En cas de litige salarial, la charge de la preuve peut se renverser : c'est à l'employeur de prouver l'absence de discrimination, et non au salarié de la démontrer. Ce diagnostic ne mesure pas la solidité de votre documentation individuelle face à ce risque, ni la connaissance des sanctions encourues (amendes, exclusion marchés publics)."
+  }
+];
+
 const ACTIONS = {
-  s1:{t:"Documenter et formaliser les critères de rémunération (compétences, responsabilités, efforts, conditions de travail)",p:'h'},
-  s2:{t:"Garantir l'application identique des critères de rémunération sans distinction de sexe",p:'h'},
-  s3:{t:"Revoir les critères de rémunération variable pour éliminer tout biais de genre potentiel",p:'h'},
-  s4:{t:"Conduire une révision des classifications de postes pour détecter et corriger la sous-évaluation liée au genre",p:'h'},
-  s5:{t:"Auditer la distribution des avantages en nature et compléments de salaire selon le sexe",p:'m'},
-  s6:{t:"Mettre en place un processus de révision périodique des critères de rémunération",p:'m'},
+  s1:{t:"Créer ou actualiser un référentiel emplois formalisé couvrant l'ensemble des postes (fiches, familles, niveaux)",p:'h'},
+  s2:{t:"Adopter une méthode de pesée des postes (Hay, Mercer, WAAGE ou équivalente) pour objectiver la notion de 'valeur égale'",p:'h'},
+  s3:{t:"Auditer le référentiel emplois pour détecter et corriger la sous-évaluation des métiers à prédominance féminine",p:'h'},
+  s4:{t:"Documenter les critères de rémunération (compétences, responsabilités, efforts, conditions) de façon objective et non sexiste",p:'h'},
+  s5:{t:"Revoir les politiques de rémunération variable et avantages en nature pour éliminer tout biais de genre",p:'h'},
+  s6:{t:"Formaliser et rendre accessibles les critères de progression salariale (augmentations, promotions)",p:'h'},
   s7:{t:"Formaliser et rendre accessibles les grilles ou fourchettes salariales par catégorie de poste",p:'h'},
-  i1:{t:"Intégrer dans l'onboarding une information sur les critères de fixation et d'évolution de la rémunération",p:'h'},
-  i2:{t:"Créer une procédure permettant à tout salarié de demander la rémunération médiane de sa catégorie de valeur égale",p:'h'},
-  i3:{t:"Garantir une réponse dans un délai maximum de 2 mois à toute demande individuelle d'information salariale",p:'h'},
-  i4:{t:"Désigner une personne ou un service RH responsable des réponses aux demandes individuelles d'information salariale",p:'h'},
-  i5:{t:"Supprimer toute clause de confidentialité interdisant à un salarié de divulguer sa propre rémunération",p:'h'},
-  i6:{t:"Formaliser le droit d'accès des représentants du personnel aux données agrégées de rémunération",p:'m'},
-  i7:{t:"Former les managers de proximité sur la politique salariale afin qu'ils puissent répondre aux questions de leurs équipes",p:'m'},
-  i8:{t:"Mener une enquête de perception sur l'équité salariale et mettre en place des actions de communication interne",p:'l'},
-  r1:{t:"Intégrer systématiquement une fourchette de rémunération dans toutes les offres d'emploi",p:'h'},
-  r2:{t:"Former les recruteurs et interdire formellement la demande d'historique salarial aux candidats",p:'h'},
-  r3:{t:"Aligner les fourchettes communiquées aux candidats avec les grilles salariales internes en vigueur",p:'m'},
-  r4:{t:"Mettre à jour le processus de publication des offres pour inclure l'information salariale sur toutes les plateformes",p:'h'},
-  r5:{t:"Mettre à jour les contrats de prestation avec les partenaires de recrutement pour inclure les obligations de transparence",p:'m'},
-  r6:{t:"Former les responsables d'entretiens sur l'interdiction de négocier sur la base d'un historique salarial",p:'h'},
-  r7:{t:"Formaliser les règles de négociation salariale à l'embauche en cohérence avec les fourchettes annoncées",p:'m'},
-  p1:{t:"Identifier la date de premier rapport applicable (2027 pour 250+ salariés ; 2031 pour 100-249 salariés)",p:'m'},
-  p2:{t:"Paramétrer le SIRH pour permettre l'extraction des rémunérations ventilées par sexe et catégorie de poste",p:'h'},
-  p3:{t:"Développer la méthodologie de calcul des indicateurs imposés (médiane, quartiles, écart des compléments)",p:'h'},
-  p4:{t:"Identifier l'autorité nationale compétente et ses exigences précises de format et de transmission",p:'m'},
-  p5:{t:"Élaborer un plan de préparation à la publication publique des indicateurs d'écart de rémunération",p:'h'},
-  p6:{t:"Préparer un plan de communication pour la diffusion des données aux salariés, représentants et au public",p:'m'},
-  p7:{t:"Rédiger une procédure d'explication et de justification à joindre au rapport en cas d'écart significatif",p:'m'},
-  p8:{t:"Mettre en place un suivi distinct par entité ou filiale selon les seuils d'effectifs applicables",p:'l'},
+  s8:{t:"Mettre en place un système de traçabilité des décisions individuelles de rémunération pour tenir la charge probatoire",p:'h'},
+  i1:{t:"Intégrer dans l'onboarding une information sur les critères de fixation ET de progression de la rémunération",p:'h'},
+  i2:{t:"Créer une procédure permettant à tout salarié d'obtenir la rémunération médiane de sa catégorie, ventilée par sexe",p:'h'},
+  i3:{t:"Désigner une personne RH responsable et garantir une réponse dans un délai maximum de 2 mois",p:'h'},
+  i4:{t:"Supprimer toute clause de confidentialité interdisant à un salarié de divulguer sa propre rémunération",p:'h'},
+  i5:{t:"Formaliser le droit d'accès des représentants du personnel aux données de rémunération et leur rôle de mandataire",p:'m'},
+  i6:{t:"Former les managers sur la politique salariale et les critères de progression pour qu'ils répondent aux questions de leurs équipes",p:'m'},
+  r1:{t:"Intégrer systématiquement une fourchette de rémunération dans toutes les offres d'emploi et avant tout entretien",p:'h'},
+  r2:{t:"Informer les candidats des dispositions de la convention collective applicable (primes, avantages, ancienneté)",p:'h'},
+  r3:{t:"Former les recruteurs et interdire formellement la demande d'historique salarial aux candidats et lors des entretiens",p:'h'},
+  r4:{t:"Réviser les intitulés de postes et offres d'emploi pour garantir des formulations non sexistes",p:'m'},
+  r5:{t:"Aligner les fourchettes communiquées aux candidats avec les grilles salariales internes en vigueur",p:'m'},
+  r6:{t:"Mettre à jour les contrats de prestation avec les partenaires de recrutement pour inclure les nouvelles obligations",p:'m'},
+  p1:{t:"Paramétrer le SIRH pour extraire les rémunérations ventilées par sexe et par catégorie de valeur égale",p:'h'},
+  p2:{t:"Développer la méthodologie de calcul des indicateurs imposés (médiane, quartiles, écart des compléments)",p:'h'},
+  p3:{t:"Préparer la publication des indicateurs et anticiper l'articulation avec la refonte de l'index d'égalité professionnelle F/H",p:'h'},
+  p4:{t:"Rédiger une procédure d'explication et de justification à joindre au rapport en cas d'écart significatif",p:'m'},
+  p5:{t:"Mettre en place un suivi distinct par entité ou filiale selon les seuils d'effectifs applicables",p:'l'},
   a1:{t:"Réaliser une analyse des écarts de rémunération F/H pour des postes de valeur égale dès cette année",p:'h'},
-  a2:{t:"Documenter de façon systématique les justifications de toute différence de rémunération constatée",p:'h'},
+  a2:{t:"Documenter les justifications de toute différence de rémunération pour résister à un renversement de la charge de la preuve",p:'h'},
   a3:{t:"Définir un protocole d'audit conjoint déclenché automatiquement si un écart inexpliqué > 5 % est détecté",p:'h'},
   a4:{t:"Planifier un premier audit conjoint de rémunération avec les représentants du personnel",p:'h'},
-  a5:{t:"Associer les représentants du personnel à la démarche d'équité salariale de façon régulière et formalisée",p:'h'},
-  a6:{t:"Formaliser un plan d'action correctif avec mesures concrètes et calendrier en cas d'écart injustifié",p:'h'},
-  a7:{t:"Mettre en place un suivi de l'efficacité des mesures correctives dans le temps",p:'m'},
-  a8:{t:"Inclure un point régulier sur les résultats des analyses d'écart dans les reportings de direction générale",p:'m'}
+  a5:{t:"Formaliser un plan d'action correctif avec mesures concrètes, responsables et calendrier",p:'h'},
+  a6:{t:"Mettre en place un suivi de l'efficacité des mesures correctives avant le prochain rapport",p:'m'},
+  a7:{t:"Évaluer l'exposition aux sanctions (amendes, exclusion marchés publics) et formaliser des mesures préventives",p:'h'}
 };
 
 const PROFILES = [
@@ -701,7 +712,7 @@ function showResults() {
     });
   });
 
-  body += `<div class="rs-sec">Préconisations (${allActs.length} action${allActs.length>1?'s':''})</div>`;
+  body += `<div class="rs-sec">Préconisations — checklist de mise en conformité</div>`;
 
   if (!allActs.length) {
     body += `<div class="rspc"><div class="noact"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7l3.5 3.5L12 3" stroke="var(--green)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Aucune action requise — conformité totale atteinte sur tous les axes.</div></div>`;
@@ -726,6 +737,22 @@ function showResults() {
   }
 
   document.getElementById('rs-body').innerHTML = body;
+
+  /* ── Section angles morts ── */
+  let blindBody = `<div class="rs-sec" style="margin-top:24px">Sujets non couverts ou partiellement couverts par ce diagnostic</div>`;
+  blindBody += `<div style="background:rgba(251,146,60,.08);border:1px solid rgba(251,146,60,.3);border-radius:var(--r);padding:14px 16px;margin-bottom:10px;font-size:13px;color:var(--txt2);line-height:1.6">
+    Ce diagnostic évalue les obligations <strong style="color:var(--txt)">directement mesurables</strong> de la directive. Certains sujets plus complexes ou nécessitant un accompagnement spécialisé ne font pas l'objet de questions — ils méritent une attention particulière.
+  </div>`;
+  BLIND_SPOTS.forEach(bs => {
+    blindBody += `<div style="background:var(--bg2);border-radius:var(--r);border:1px solid var(--border);padding:14px 16px;margin-bottom:9px">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:7px">
+        <span style="background:rgba(251,146,60,.15);border:1px solid rgba(251,146,60,.4);color:#fb923c;font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;white-space:nowrap">${bs.ref}</span>
+        <span style="font-size:14px;font-weight:600;color:var(--txt)">${bs.label}</span>
+      </div>
+      <div style="font-size:13px;color:var(--txt2);line-height:1.58">${bs.detail}</div>
+    </div>`;
+  });
+  document.getElementById('rs-body').innerHTML += blindBody;
   requestAnimationFrame(() => {
     window.scrollTo({ top: 0, behavior: 'instant' });
     document.documentElement.scrollTop = 0;

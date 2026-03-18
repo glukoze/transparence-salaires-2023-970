@@ -822,12 +822,12 @@ async function downloadPDF() {
   doc.setTextColor(15,25,50);
   doc.text('Résultats par axe de la directive', M, y); y += 7;
 
-  CATS.forEach(cat => {
+  CATS.forEach((cat, ci) => {
     const s = catScore(cat.id);
     const [r,gv,b] = h2r(scCol(s));
     doc.setFontSize(9); doc.setFont('helvetica','normal');
     doc.setTextColor(30,45,70);
-    doc.text(cat.icon + ' ' + cat.label, M, y);
+    doc.text((ci+1) + '. ' + cat.label, M, y);
     doc.setFillColor(225,230,240);
     doc.roundedRect(M+92,y-3.5,56,4.5,2,2,'F');
     doc.setFillColor(r,gv,b);
@@ -847,7 +847,7 @@ async function downloadPDF() {
   doc.text('Préconisations — checklist de mise en conformité', M, y); y += 8;
 
   let hasAny = false;
-  CATS.forEach(cat => {
+  CATS.forEach((cat, ci) => {
     const acts = cat.questions
       .filter(q => answers[q.id] !== 'oui' && ACTIONS[q.id])
       .map(q => ({...ACTIONS[q.id], qid:q.id}));
@@ -855,12 +855,12 @@ async function downloadPDF() {
     hasAny = true;
     np(14);
 
-    /* Titre de catégorie */
+    /* Titre de catégorie sans emoji */
     doc.setFillColor(240,244,255);
     doc.roundedRect(M, y-4, W-M*2, 8, 2,2,'F');
     doc.setFontSize(9); doc.setFont('helvetica','bold');
     doc.setTextColor(20,40,90);
-    doc.text(cat.icon + ' ' + cat.label, M+3, y+0.5);
+    doc.text((ci+1) + '. ' + cat.label, M+3, y+0.5);
     y += 8;
 
     acts.sort((a,b) => ({h:0,m:1,l:2}[a.p]-{h:0,m:1,l:2}[b.p])).forEach(a => {

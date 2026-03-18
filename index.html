@@ -648,8 +648,6 @@ function nextCat() { if(currentCat < CATS.length - 1) renderCat(currentCat + 1);
 
 function showResults() {
   show('screen-results');
-  window.scrollTo(0, 0);
-  document.getElementById('screen-results').scrollTop = 0;
   const g = globalScore(), pr = getProfile(g);
   document.getElementById('rs-num').textContent = g;
   document.getElementById('rs-pnm').textContent = pr.name;
@@ -716,6 +714,11 @@ function showResults() {
   }
 
   document.getElementById('rs-body').innerHTML = body;
+  requestAnimationFrame(() => {
+    window.scrollTo({ top: 0, behavior: 'instant' });
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+  });
 }
 
 function toggleCat(h) {

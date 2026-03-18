@@ -721,28 +721,52 @@ function toggleCat(h) {
   b.classList.toggle('open'); c.classList.toggle('open');
 }
 
-function downloadPDF() {
+function svgToPng(svgDataUrl, w, h) {
+  return new Promise(resolve => {
+    const img = new Image();
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      canvas.width = w; canvas.height = h;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, w, h);
+      resolve(canvas.toDataURL('image/png'));
+    };
+    img.onerror = () => resolve(null);
+    img.src = svgDataUrl;
+  });
+}
+
+async function downloadPDF() {
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF({ unit: 'mm', format: 'a4' });
   const W = 210, M = 18; let y = 0;
   const g = globalScore(), pr = getProfile(g);
   const date = new Date().toLocaleDateString('fr-FR', {day:'2-digit', month:'long', year:'numeric'});
 
+  /* Convertir le SVG logo en PNG pour jsPDF */
+  const logoPng = await svgToPng(LOGO, 388, 90);
+
   function np(n=12) { if(y+n > 275) { doc.addPage(); y = M; } }
   function h2r(h) { return h.replace('#','').match(/../g).map(x=>parseInt(x,16)); }
 
-  /* ── Bandeau header fond sombre ── */
+  /* ── Bandeau header ── */
   doc.setFillColor(10,14,26);
   doc.rect(0,0,W,44,'F');
-  doc.setTextColor(255,255,255);
-  doc.setFontSize(15); doc.setFont('helvetica','bold');
-  doc.text('GLUKOZE', M, 14);
+
+  /* Logo image si disponible, sinon texte de secours */
+  if (logoPng) {
+    doc.addImage(logoPng, 'PNG', M, 9, 48, 11);
+  } else {
+    doc.setTextColor(255,255,255);
+    doc.setFontSize(15); doc.setFont('helvetica','bold');
+    doc.text('GLUKOZE', M, 18);
+  }
   doc.setFontSize(8); doc.setFont('helvetica','normal');
   doc.setTextColor(150,185,255);
-  doc.text('Diagnostic Transparence Salariale  —  Directive (UE) 2023/970', M, 22);
+  doc.text('Diagnostic Transparence Salariale  —  Directive (UE) 2023/970', M, 25);
   doc.setTextColor(120,145,195);
-  doc.text('Rapport confidentiel  —  ' + date, M, 29);
-  doc.text('Traitement 100 % local · Aucune donnée stockée ou transmise (RGPD)', M, 36);
+  doc.text('Rapport confidentiel  —  ' + date, M, 31);
+  doc.text('Traitement 100 % local · Aucune donnée stockée ou transmise (RGPD)', M, 37);
 
   /* Badge score */
   const [pr1,pr2,pr3] = h2r(pr.bc);

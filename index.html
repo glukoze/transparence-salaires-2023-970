@@ -82,7 +82,7 @@ img { display: block; }
 .wh-title span { color: var(--blue); }
 .wh-sub { font-size: 14px; color: var(--txt2); line-height: 1.65; }
 
-.wb { padding: 24px 20px 120px; flex: 1; background: var(--bg); }
+.wb { padding: 24px 20px 20px; flex: 1; background: var(--bg); }
 
 .wcard {
   background: var(--bg2); border-radius: var(--r);
@@ -111,9 +111,10 @@ img { display: block; }
 .waxe-ct { font-size: 12px; color: var(--txt3); }
 
 .wnav {
-  position: fixed; bottom: 0; left: 0; right: 0;
+  position: sticky; bottom: 0; left: 0; right: 0;
   background: var(--bg2); border-top: 1px solid var(--border);
   padding: 12px 20px calc(12px + env(safe-area-inset-bottom)); z-index: 200;
+  margin-top: auto;
 }
 .btn-start {
   width: 100%; background: var(--blue); color: #fff;
@@ -155,7 +156,7 @@ img { display: block; }
 .qtab.active { background: var(--blue); color: #fff; border-color: var(--blue); }
 .qtab.done { background: var(--green-bg); color: var(--green); border-color: var(--green-brd); }
 
-.qscroll { flex: 1; overflow-y: auto; padding: 18px 16px 110px; }
+.qscroll { flex: 1; overflow-y: auto; padding: 18px 16px 24px; }
 
 .qcat-head { margin-bottom: 20px; }
 .qcat-row { display: flex; align-items: center; gap: 10px; margin-bottom: 4px; }
@@ -216,7 +217,7 @@ img { display: block; }
 .tg-oui.sel .tglbl  { color: #4ade80; }
 
 .qnav {
-  position: fixed; bottom: 0; left: 0; right: 0;
+  position: sticky; bottom: 0; left: 0; right: 0;
   background: var(--bg2); border-top: 1px solid var(--border);
   padding: 11px 16px calc(11px + env(safe-area-inset-bottom));
   display: flex; gap: 8px; align-items: center; z-index: 200;
@@ -273,7 +274,7 @@ img { display: block; }
 .rsg-fill { height: 4px; border-radius: 2px; transition: width .7s ease; }
 .rsg-pct { font-size: 12px; font-weight: 700; white-space: nowrap; width: 36px; text-align: right; flex-shrink: 0; }
 
-.rsbody { padding: 20px 16px 150px; }
+.rsbody { padding: 20px 16px 24px; }
 .rs-sec { font-size: 11px; font-weight: 600; color: var(--txt3); text-transform: uppercase; letter-spacing: .08em; margin: 20px 0 10px; }
 
 .rspc {
@@ -320,9 +321,9 @@ img { display: block; }
 .noact { padding: 12px 0 4px; font-size: 13.5px; color: var(--green); display: flex; align-items: center; gap: 8px; }
 
 .rsfoot {
-  position: fixed; bottom: 0; left: 0; right: 0;
   background: var(--bg2); border-top: 1px solid var(--border);
-  padding: 10px 18px calc(10px + env(safe-area-inset-bottom)); z-index: 200;
+  padding: 14px 18px calc(20px + env(safe-area-inset-bottom));
+  position: sticky; bottom: 0; z-index: 200;
 }
 .rsrgpd {
   font-size: 10px; color: var(--txt3); text-align: center; line-height: 1.5; margin-bottom: 9px;
@@ -451,7 +452,9 @@ const CATS = [
     {id:'i3',text:"Une personne ou un service RH désigné est-il en charge de répondre à ces demandes dans un délai garanti de 2 mois maximum ?"},
     {id:'i4',text:"Votre règlement intérieur interdit-il toute clause de confidentialité empêchant un salarié de divulguer sa propre rémunération ?"},
     {id:'i5',text:"Les représentants du personnel ont-ils accès aux données agrégées de rémunération et peuvent-ils se faire mandataires d'un salarié dans sa démarche d'information salariale ?"},
-    {id:'i6',text:"Les managers de proximité sont-ils formés pour expliquer à leurs équipes la politique de rémunération et les critères de progression ?"}
+    {id:'i6',text:"Les managers de proximité sont-ils formés pour expliquer à leurs équipes la politique de rémunération et les critères de progression ?"},
+    {id:'i7',text:"Un processus de révision périodique des critères de rémunération est-il en place pour détecter les biais potentiels et maintenir leur objectivité ?"},
+    {id:'i8',text:"Les salariés ont-ils accès à un outil ou document leur permettant de comprendre comment leur rémunération individuelle se situe dans la grille de leur catégorie ?"}
   ]},
   { id:'rec', label:'Transparence du recrutement', short:'Recrutement', icon:'👤', color:'#a78bfa', dot:'#a78bfa', ref:'Art. 5 & 6 — Directive (UE) 2023/970', questions:[
     {id:'r1',text:"Indiquez-vous systématiquement une fourchette de rémunération dans toutes vos offres d'emploi et avant le premier entretien ?"},
@@ -459,14 +462,19 @@ const CATS = [
     {id:'r3',text:"Avez-vous formellement interdit aux recruteurs et responsables d'entretiens de demander l'historique salarial des candidats ?"},
     {id:'r4',text:"Vos offres d'emploi et intitulés de postes sont-ils rédigés de façon non sexiste (formulations épicènes ou doublets) ?"},
     {id:'r5',text:"La fourchette communiquée aux candidats correspond-elle aux grilles salariales internes en vigueur pour ce poste ?"},
-    {id:'r6',text:"Vos partenaires de recrutement (cabinets, agences) respectent-ils les mêmes obligations d'information salariale lorsqu'ils agissent pour votre compte ?"}
+    {id:'r6',text:"Vos partenaires de recrutement (cabinets, agences) respectent-ils les mêmes obligations d'information salariale lorsqu'ils agissent pour votre compte ?"},
+    {id:'r7',text:"Votre processus de négociation salariale à l'embauche garantit-il que l'offre finale reste dans la fourchette annoncée au candidat, sans référence à son salaire précédent ?"},
+    {id:'r8',text:"Disposez-vous d'un processus de contrôle interne permettant de vérifier la cohérence entre les fourchettes publiées dans les offres et les salaires effectivement proposés à l'embauche ?"}
   ]},
   { id:'rep', label:'Reporting & obligations légales', short:'Reporting', icon:'📊', color:'#2dd4bf', dot:'#2dd4bf', ref:'Art. 9 & 10 — Directive (UE) 2023/970', questions:[
     {id:'p1',text:"Votre SIRH permet-il d'extraire les données de rémunération ventilées par sexe ET par catégorie de travailleurs effectuant un travail de valeur égale ?"},
     {id:'p2',text:"Êtes-vous en mesure de calculer les indicateurs imposés par la directive (écart médian F/H, répartition par quartile, écart des compléments de rémunération) ?"},
     {id:'p3',text:"Avez-vous anticipé la publication publique de ces indicateurs et l'articulation avec votre index d'égalité professionnelle F/H actuel ?"},
     {id:'p4',text:"Avez-vous prévu une procédure d'explication et de justification à joindre au rapport si un écart significatif est constaté ?"},
-    {id:'p5',text:"Vos filiales ou entités relevant de seuils différents font-elles l'objet d'un suivi distinct pour les obligations déclaratives ?"}
+    {id:'p5',text:"Vos filiales ou entités relevant de seuils différents font-elles l'objet d'un suivi distinct pour les obligations déclaratives ?"},
+    {id:'p6',text:"Avez-vous identifié la date d'échéance du premier rapport applicable à votre entreprise (2027 pour 250+ salariés, 2031 pour 100-249) et planifié les jalons de préparation ?"},
+    {id:'p7',text:"Un plan de communication interne a-t-il été préparé pour expliquer aux salariés et aux représentants du personnel les données qui seront publiées ?"},
+    {id:'p8',text:"Avez-vous désigné un responsable en charge de la coordination du reporting (DRH, DAF ou juriste) avec un mandat et des ressources dédiés ?"}
   ]},
   { id:'aud', label:'Audit conjoint & action corrective', short:'Audit', icon:'🔍', color:'#fb923c', dot:'#fb923c', ref:'Art. 10 & 18 — Directive (UE) 2023/970', questions:[
     {id:'a1',text:"Avez-vous réalisé une analyse des écarts de rémunération F/H pour des postes de valeur égale au cours des 12 derniers mois ?"},
@@ -475,7 +483,8 @@ const CATS = [
     {id:'a4',text:"Un audit conjoint de rémunération a-t-il déjà été réalisé en association avec les représentants du personnel ?"},
     {id:'a5',text:"Un plan d'action correctif avec mesures concrètes, responsables désignés et calendrier est-il mis en place lorsqu'un écart injustifié est détecté ?"},
     {id:'a6',text:"Les mesures correctives prises sont-elles suivies dans le temps et leur efficacité évaluée avant le prochain rapport ?"},
-    {id:'a7',text:"L'entreprise a-t-elle évalué son exposition aux sanctions prévues par la directive (amendes, exclusion des marchés publics) et mis en place des mesures préventives ?"}
+    {id:'a7',text:"L'entreprise a-t-elle évalué son exposition aux sanctions prévues par la directive (amendes, exclusion des marchés publics) et mis en place des mesures préventives ?"},
+    {id:'a8',text:"Les représentants du personnel sont-ils associés en amont à la définition des catégories de travailleurs et des critères de valeur égale, pas seulement informés des résultats ?"}
   ]}
 ];
 
@@ -523,18 +532,24 @@ const ACTIONS = {
   r4:{t:"Réviser les intitulés de postes et offres d'emploi pour garantir des formulations non sexistes",p:'m'},
   r5:{t:"Aligner les fourchettes communiquées aux candidats avec les grilles salariales internes en vigueur",p:'m'},
   r6:{t:"Mettre à jour les contrats de prestation avec les partenaires de recrutement pour inclure les nouvelles obligations",p:'m'},
+  r7:{t:"Formaliser la règle de négociation à l'embauche : l'offre finale doit rester dans la fourchette annoncée, sans référence au salaire précédent",p:'m'},
+  r8:{t:"Mettre en place un contrôle interne de cohérence entre fourchettes publiées et salaires effectivement proposés",p:'m'},
   p1:{t:"Paramétrer le SIRH pour extraire les rémunérations ventilées par sexe et par catégorie de valeur égale",p:'h'},
   p2:{t:"Développer la méthodologie de calcul des indicateurs imposés (médiane, quartiles, écart des compléments)",p:'h'},
   p3:{t:"Préparer la publication des indicateurs et anticiper l'articulation avec la refonte de l'index d'égalité professionnelle F/H",p:'h'},
   p4:{t:"Rédiger une procédure d'explication et de justification à joindre au rapport en cas d'écart significatif",p:'m'},
   p5:{t:"Mettre en place un suivi distinct par entité ou filiale selon les seuils d'effectifs applicables",p:'l'},
+  p6:{t:"Identifier la date d'échéance du premier rapport et planifier les jalons de préparation (collecte, calcul, validation, publication)",p:'h'},
+  p7:{t:"Préparer un plan de communication interne pour expliquer aux salariés et aux IRP les données qui seront publiées",p:'m'},
+  p8:{t:"Désigner un responsable de la coordination du reporting avec un mandat et des ressources dédiés",p:'m'},
   a1:{t:"Réaliser une analyse des écarts de rémunération F/H pour des postes de valeur égale dès cette année",p:'h'},
   a2:{t:"Documenter les justifications de toute différence de rémunération pour résister à un renversement de la charge de la preuve",p:'h'},
   a3:{t:"Définir un protocole d'audit conjoint déclenché automatiquement si un écart inexpliqué > 5 % est détecté",p:'h'},
   a4:{t:"Planifier un premier audit conjoint de rémunération avec les représentants du personnel",p:'h'},
   a5:{t:"Formaliser un plan d'action correctif avec mesures concrètes, responsables et calendrier",p:'h'},
   a6:{t:"Mettre en place un suivi de l'efficacité des mesures correctives avant le prochain rapport",p:'m'},
-  a7:{t:"Évaluer l'exposition aux sanctions (amendes, exclusion marchés publics) et formaliser des mesures préventives",p:'h'}
+  a7:{t:"Évaluer l'exposition aux sanctions (amendes, exclusion marchés publics) et formaliser des mesures préventives",p:'h'},
+  a8:{t:"Associer les représentants du personnel en amont à la définition des catégories de travailleurs et des critères de valeur égale",p:'m'}
 };
 
 const PROFILES = [
